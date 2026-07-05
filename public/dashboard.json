@@ -1,0 +1,920 @@
+{
+  "ai_summary": "India faces acute air quality stress: Ahmedabad leads with AQI 452. Delhi-NCR hotspots (Anand Vihar, Delhi, ITO, Delhi, Shadipur, Delhi) show critical pollution. Traffic peaks during Afternoon align with pollution spikes. 80 industrial sources across 2 zones amplify exposure. Immediate actions: Deploy enforcement in Anand Vihar, Delhi, impose traffic restrictions during night hours.",
+  "alert_headline": "ALERT: AQI thresholds exceeded in multiple Delhi hotspots; enforcement escalation advised.",
+  "city_count": 5,
+  "station_count": 23,
+  "selected_datetime": "2025-12-31 23:00:00",
+  "india_summary": [
+    {
+      "city": "Ahmedabad",
+      "avg_aqi": 452.12293853073464,
+      "latest_date": "2020-07-01"
+    },
+    {
+      "city": "Delhi",
+      "avg_aqi": 259.48774387193595,
+      "latest_date": "2020-07-01"
+    },
+    {
+      "city": "Patna",
+      "avg_aqi": 240.7820424948595,
+      "latest_date": "2020-07-01"
+    },
+    {
+      "city": "Gurugram",
+      "avg_aqi": 225.12388162422573,
+      "latest_date": "2020-07-01"
+    },
+    {
+      "city": "Lucknow",
+      "avg_aqi": 217.973058637084,
+      "latest_date": "2020-07-01"
+    },
+    {
+      "city": "Talcher",
+      "avg_aqi": 172.88681948424068,
+      "latest_date": "2020-07-01"
+    },
+    {
+      "city": "Jorapokhar",
+      "avg_aqi": 159.25162127107652,
+      "latest_date": "2020-07-01"
+    },
+    {
+      "city": "Brajrajnagar",
+      "avg_aqi": 150.2805049088359,
+      "latest_date": "2020-06-12"
+    }
+  ],
+  "national_trends": [
+    {
+      "date": "2020-06-12",
+      "aqi": 83.04,
+      "avg_aqi": 83.0
+    },
+    {
+      "date": "2020-06-13",
+      "aqi": 77.70833333333333,
+      "avg_aqi": 77.7
+    },
+    {
+      "date": "2020-06-14",
+      "aqi": 71.6086956521739,
+      "avg_aqi": 71.6
+    },
+    {
+      "date": "2020-06-15",
+      "aqi": 70.65217391304348,
+      "avg_aqi": 70.7
+    },
+    {
+      "date": "2020-06-16",
+      "aqi": 69.875,
+      "avg_aqi": 69.9
+    },
+    {
+      "date": "2020-06-17",
+      "aqi": 69.95652173913044,
+      "avg_aqi": 70.0
+    },
+    {
+      "date": "2020-06-18",
+      "aqi": 71.43478260869566,
+      "avg_aqi": 71.4
+    },
+    {
+      "date": "2020-06-19",
+      "aqi": 75.25,
+      "avg_aqi": 75.2
+    },
+    {
+      "date": "2020-06-20",
+      "aqi": 79.56,
+      "avg_aqi": 79.6
+    },
+    {
+      "date": "2020-06-21",
+      "aqi": 72.88,
+      "avg_aqi": 72.9
+    },
+    {
+      "date": "2020-06-22",
+      "aqi": 67.72,
+      "avg_aqi": 67.7
+    },
+    {
+      "date": "2020-06-23",
+      "aqi": 73.04,
+      "avg_aqi": 73.0
+    },
+    {
+      "date": "2020-06-24",
+      "aqi": 71.4,
+      "avg_aqi": 71.4
+    },
+    {
+      "date": "2020-06-25",
+      "aqi": 69.92,
+      "avg_aqi": 69.9
+    },
+    {
+      "date": "2020-06-26",
+      "aqi": 77.08,
+      "avg_aqi": 77.1
+    },
+    {
+      "date": "2020-06-27",
+      "aqi": 72.6,
+      "avg_aqi": 72.6
+    },
+    {
+      "date": "2020-06-28",
+      "aqi": 77.48,
+      "avg_aqi": 77.5
+    },
+    {
+      "date": "2020-06-29",
+      "aqi": 76.4,
+      "avg_aqi": 76.4
+    },
+    {
+      "date": "2020-06-30",
+      "aqi": 70.4,
+      "avg_aqi": 70.4
+    },
+    {
+      "date": "2020-07-01",
+      "aqi": 72.5,
+      "avg_aqi": 72.5
+    }
+  ],
+  "delhi_hotspots": [
+    {
+      "station": "Anand Vihar, Delhi",
+      "city": "Delhi",
+      "aqi": 500.0
+    },
+    {
+      "station": "ITO, Delhi",
+      "city": "Delhi",
+      "aqi": 500.0
+    },
+    {
+      "station": "Shadipur, Delhi",
+      "city": "Delhi",
+      "aqi": 500.0
+    },
+    {
+      "station": "Punjabi Bagh, Delhi",
+      "city": "Delhi",
+      "aqi": 500.0
+    },
+    {
+      "station": "Okhla Phase 2, Delhi",
+      "city": "Delhi",
+      "aqi": 500.0
+    },
+    {
+      "station": "Noida Sec 62",
+      "city": "Noida",
+      "aqi": 500.0
+    },
+    {
+      "station": "NSIT Dwarka, Delhi",
+      "city": "Delhi",
+      "aqi": 500.0
+    },
+    {
+      "station": "Mandir Marg, Delhi",
+      "city": "Delhi",
+      "aqi": 500.0
+    }
+  ],
+  "forecast_cards": [
+    {
+      "station": "Noida Sec 62",
+      "city": "Noida",
+      "aqi": 500,
+      "aqi_bucket": "Severe",
+      "peak_hour": 18,
+      "risk_note": "High congestion and low dispersion are expected to sustain the hotspot."
+    },
+    {
+      "station": "Punjabi Bagh, Delhi",
+      "city": "Delhi",
+      "aqi": 500,
+      "aqi_bucket": "Severe",
+      "peak_hour": 18,
+      "risk_note": "High congestion and low dispersion are expected to sustain the hotspot."
+    },
+    {
+      "station": "Greater Noida",
+      "city": "Noida",
+      "aqi": 500,
+      "aqi_bucket": "Severe",
+      "peak_hour": 18,
+      "risk_note": "High congestion and low dispersion are expected to sustain the hotspot."
+    },
+    {
+      "station": "Bawana, Delhi",
+      "city": "Delhi",
+      "aqi": 500,
+      "aqi_bucket": "Severe",
+      "peak_hour": 18,
+      "risk_note": "High congestion and low dispersion are expected to sustain the hotspot."
+    },
+    {
+      "station": "Gurugram Vikas Sadan",
+      "city": "Gurugram",
+      "aqi": 500,
+      "aqi_bucket": "Severe",
+      "peak_hour": 18,
+      "risk_note": "High congestion and low dispersion are expected to sustain the hotspot."
+    }
+  ],
+  "source_attribution": [
+    {
+      "station": "Anand Vihar, Delhi",
+      "city": "Delhi",
+      "aqi": 500,
+      "traffic_signal": "High",
+      "factory_signal": "High",
+      "geospatial_note": "Building-footprint density and nearby industrial clusters correlate with elevated local exposure.",
+      "priority": "Immediate"
+    },
+    {
+      "station": "ITO, Delhi",
+      "city": "Delhi",
+      "aqi": 500,
+      "traffic_signal": "High",
+      "factory_signal": "High",
+      "geospatial_note": "Building-footprint density and nearby industrial clusters correlate with elevated local exposure.",
+      "priority": "Immediate"
+    },
+    {
+      "station": "Shadipur, Delhi",
+      "city": "Delhi",
+      "aqi": 500,
+      "traffic_signal": "High",
+      "factory_signal": "High",
+      "geospatial_note": "Building-footprint density and nearby industrial clusters correlate with elevated local exposure.",
+      "priority": "Immediate"
+    },
+    {
+      "station": "Punjabi Bagh, Delhi",
+      "city": "Delhi",
+      "aqi": 500,
+      "traffic_signal": "High",
+      "factory_signal": "High",
+      "geospatial_note": "Building-footprint density and nearby industrial clusters correlate with elevated local exposure.",
+      "priority": "Immediate"
+    },
+    {
+      "station": "Okhla Phase 2, Delhi",
+      "city": "Delhi",
+      "aqi": 500,
+      "traffic_signal": "High",
+      "factory_signal": "High",
+      "geospatial_note": "Building-footprint density and nearby industrial clusters correlate with elevated local exposure.",
+      "priority": "Immediate"
+    }
+  ],
+  "factory_by_zone": {
+    "Central": [
+      {
+        "name": "Shiva Iron and Brass Works",
+        "category": "Industrial"
+      },
+      {
+        "name": "Delhi Printing Press",
+        "category": "Printing"
+      },
+      {
+        "name": "Govt of India Press",
+        "category": "Printing"
+      },
+      {
+        "name": "The Stateman House",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Chronical Press",
+        "category": "Printing"
+      },
+      {
+        "name": "Ishwar Industries",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Parag Distrill Water and Ice Factory",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "The Delhi Flour Mills Co Ltd",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Delhi Electric Supply Undertaking",
+        "category": "Energy"
+      },
+      {
+        "name": "Sewage Disposal Works",
+        "category": "Industrial"
+      },
+      {
+        "name": "Indraprastha Power Generation Co Ltd",
+        "category": "Energy"
+      },
+      {
+        "name": "Delhi Jal Board",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Dinbandhu Hosiery Mills",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Municipal Press",
+        "category": "Printing"
+      },
+      {
+        "name": "Govt of India Press",
+        "category": "Printing"
+      },
+      {
+        "name": "Nehru Hosiery Mills",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "E P Rly Main Loco",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Ordiance Factory",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "C P W D Auto",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Ajanta Iron and Steel Co",
+        "category": "Industrial"
+      },
+      {
+        "name": "Gopi Nath Pvt Ltd",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Observatory Works India Metrological",
+        "category": "Industrial"
+      },
+      {
+        "name": "Station Workshop",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Delhi Press",
+        "category": "Printing"
+      },
+      {
+        "name": "Punjab Motor Workshop",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Standard Enamel Works",
+        "category": "Industrial"
+      },
+      {
+        "name": "Crescent Printing Works Pvt Ltd",
+        "category": "Printing"
+      },
+      {
+        "name": "Central Ordinace Depot",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Novex Private Ltd",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Imperial Ice Factory",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Racamaun Kashat Kumar",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Rohtas Engg Work Ltd",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Hamdard (Wak) Laboratories",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Hindustan Tin Factory",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Kasting Pvt Ltd",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Eastern Engg Works",
+        "category": "Industrial"
+      },
+      {
+        "name": "Shriram Continer Works",
+        "category": "Industrial"
+      },
+      {
+        "name": "Kumar Brass Sheet and Metal Works",
+        "category": "Industrial"
+      },
+      {
+        "name": "Jain Engg Works",
+        "category": "Industrial"
+      },
+      {
+        "name": "Edwart Knitwear (S) Pvt Ltd",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Gulab Chand Kapoor and Sons",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Grover Steel Pvt Rooling Mills Ltd",
+        "category": "Industrial"
+      },
+      {
+        "name": "Badnwar and Co",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Sardar Almormian Factory",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Madan Half Tone Co",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Bhagwan Dass and Co Workshop",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Northren Railway Printing Press",
+        "category": "Printing"
+      },
+      {
+        "name": "Shourie Equipment Mfg Pvt Ltd",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Prem Enamel Metal Factory",
+        "category": "Industrial"
+      },
+      {
+        "name": "Delhi Engineering Works Pvt Ltd",
+        "category": "Industrial"
+      },
+      {
+        "name": "Narvada Cold Storage and Ice Factory",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Natioanl Eombrodary Works",
+        "category": "Industrial"
+      },
+      {
+        "name": "Standard Type Foundary",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Amar Glass Work",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Chawla Brass and Almomiam Co",
+        "category": "Industrial"
+      },
+      {
+        "name": "Ram Body Builders",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Prem Engg Works",
+        "category": "Industrial"
+      },
+      {
+        "name": "Inderaprastha Ice and Cold Storage",
+        "category": "Cold Storage"
+      },
+      {
+        "name": "National Type Foundary",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Kamla Tyre Foundary (Regd)",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Allays and Foundation Co",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Jain Co",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Darbar Co Ltd",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Punjab Sort Gola Fae",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Bengal Weaving Factory",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "American Rubber Mill Co (Regd)",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "International Industries",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "India Offret Press",
+        "category": "Printing"
+      },
+      {
+        "name": "Sudershan steel and Rolling Mill",
+        "category": "Industrial"
+      },
+      {
+        "name": "Central Works of DTC",
+        "category": "Industrial"
+      },
+      {
+        "name": "D T C Workshop",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Sri Niwas Tin Factory",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Lajpal Polteries Pvt Ltd",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Frintial Printing and Furnishing Co",
+        "category": "Printing"
+      },
+      {
+        "name": "Jolly Engg Works",
+        "category": "Industrial"
+      },
+      {
+        "name": "Still bire Furniture Works",
+        "category": "Industrial"
+      },
+      {
+        "name": "Punjab Manufacturing Corp",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Hindustan Fast Food Mfg Factory",
+        "category": "Manufacturing"
+      },
+      {
+        "name": "Acme Battaries",
+        "category": "Manufacturing"
+      }
+    ],
+    "East": [
+      {
+        "name": "505 Army Base Workshop",
+        "category": "Manufacturing"
+      }
+    ]
+  },
+  "factory_count": 80,
+  "factory_preview": [
+    {
+      "sl_no": "1",
+      "fd_no": "10",
+      "name": "Shiva Iron and Brass Works",
+      "inferred_zone": "Central",
+      "category": "Industrial"
+    },
+    {
+      "sl_no": "2",
+      "fd_no": "15",
+      "name": "Delhi Printing Press",
+      "inferred_zone": "Central",
+      "category": "Printing"
+    },
+    {
+      "sl_no": "3",
+      "fd_no": "19",
+      "name": "Govt of India Press",
+      "inferred_zone": "Central",
+      "category": "Printing"
+    },
+    {
+      "sl_no": "4",
+      "fd_no": "21",
+      "name": "The Stateman House",
+      "inferred_zone": "Central",
+      "category": "Manufacturing"
+    },
+    {
+      "sl_no": "5",
+      "fd_no": "22",
+      "name": "Chronical Press",
+      "inferred_zone": "Central",
+      "category": "Printing"
+    },
+    {
+      "sl_no": "6",
+      "fd_no": "24",
+      "name": "Ishwar Industries",
+      "inferred_zone": "Central",
+      "category": "Manufacturing"
+    },
+    {
+      "sl_no": "7",
+      "fd_no": "26",
+      "name": "Parag Distrill Water and Ice Factory",
+      "inferred_zone": "Central",
+      "category": "Manufacturing"
+    },
+    {
+      "sl_no": "8",
+      "fd_no": "32",
+      "name": "The Delhi Flour Mills Co Ltd",
+      "inferred_zone": "Central",
+      "category": "Manufacturing"
+    },
+    {
+      "sl_no": "9",
+      "fd_no": "34",
+      "name": "Delhi Electric Supply Undertaking",
+      "inferred_zone": "Central",
+      "category": "Energy"
+    },
+    {
+      "sl_no": "10",
+      "fd_no": "40",
+      "name": "Sewage Disposal Works",
+      "inferred_zone": "Central",
+      "category": "Industrial"
+    }
+  ],
+  "traffic_correlation": {
+    "by_period": [
+      {
+        "period": "Afternoon",
+        "hours": [
+          12,
+          13,
+          14,
+          15,
+          16
+        ],
+        "avg_aqi": 243.4,
+        "traffic_congestion_score": 0,
+        "avg_speed_kmph": 32.7,
+        "correlation_insight": "Afternoon shows moderate traffic and stable AQI conditions."
+      },
+      {
+        "period": "Night",
+        "hours": [
+          21,
+          22,
+          23,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "avg_aqi": 267.0,
+        "traffic_congestion_score": 0,
+        "avg_speed_kmph": 40.8,
+        "correlation_insight": "Night shows moderate traffic and stable AQI conditions."
+      }
+    ],
+    "highest_aqi_period": "Night",
+    "highest_traffic_period": "Afternoon"
+  },
+  "recommendations": [
+    {
+      "station": "Anand Vihar, Delhi",
+      "city": "Delhi",
+      "priority": "Immediate",
+      "action": "Deploy inspectors for dust-control, idling enforcement, and hotspot-specific compliance checks.",
+      "reason": "Persistent high AQI suggests concentrated emissions and significant public exposure."
+    },
+    {
+      "station": "ITO, Delhi",
+      "city": "Delhi",
+      "priority": "Immediate",
+      "action": "Deploy inspectors for dust-control, idling enforcement, and hotspot-specific compliance checks.",
+      "reason": "Persistent high AQI suggests concentrated emissions and significant public exposure."
+    },
+    {
+      "station": "Shadipur, Delhi",
+      "city": "Delhi",
+      "priority": "Immediate",
+      "action": "Deploy inspectors for dust-control, idling enforcement, and hotspot-specific compliance checks.",
+      "reason": "Persistent high AQI suggests concentrated emissions and significant public exposure."
+    },
+    {
+      "station": "Punjabi Bagh, Delhi",
+      "city": "Delhi",
+      "priority": "Immediate",
+      "action": "Deploy inspectors for dust-control, idling enforcement, and hotspot-specific compliance checks.",
+      "reason": "Persistent high AQI suggests concentrated emissions and significant public exposure."
+    },
+    {
+      "station": "Okhla Phase 2, Delhi",
+      "city": "Delhi",
+      "priority": "Immediate",
+      "action": "Deploy inspectors for dust-control, idling enforcement, and hotspot-specific compliance checks.",
+      "reason": "Persistent high AQI suggests concentrated emissions and significant public exposure."
+    }
+  ],
+  "station_locations": [
+    {
+      "station": "Siri Fort, Delhi",
+      "city": "Delhi",
+      "latitude": 28.5535,
+      "longitude": 77.2167,
+      "aqi": 390
+    },
+    {
+      "station": "Punjabi Bagh, Delhi",
+      "city": "Delhi",
+      "latitude": 28.6683,
+      "longitude": 77.1311,
+      "aqi": 500
+    },
+    {
+      "station": "RK Puram, Delhi",
+      "city": "Delhi",
+      "latitude": 28.5631,
+      "longitude": 77.1851,
+      "aqi": 492
+    },
+    {
+      "station": "Shadipur, Delhi",
+      "city": "Delhi",
+      "latitude": 28.6519,
+      "longitude": 77.1579,
+      "aqi": 500
+    },
+    {
+      "station": "Wazirpur, Delhi",
+      "city": "Delhi",
+      "latitude": 28.6999,
+      "longitude": 77.1653,
+      "aqi": 500
+    },
+    {
+      "station": "Okhla Phase 2, Delhi",
+      "city": "Delhi",
+      "latitude": 28.5308,
+      "longitude": 77.271,
+      "aqi": 500
+    },
+    {
+      "station": "Noida Sec 125",
+      "city": "Noida",
+      "latitude": 28.5447,
+      "longitude": 77.323,
+      "aqi": 489
+    },
+    {
+      "station": "NSIT Dwarka, Delhi",
+      "city": "Delhi",
+      "latitude": 28.6089,
+      "longitude": 77.0327,
+      "aqi": 500
+    },
+    {
+      "station": "Faridabad Sec 16A",
+      "city": "Faridabad",
+      "latitude": 28.4089,
+      "longitude": 77.3178,
+      "aqi": 479
+    },
+    {
+      "station": "Mandir Marg, Delhi",
+      "city": "Delhi",
+      "latitude": 28.6362,
+      "longitude": 77.201,
+      "aqi": 500
+    },
+    {
+      "station": "Ghaziabad Loni",
+      "city": "Ghaziabad",
+      "latitude": 28.7529,
+      "longitude": 77.2782,
+      "aqi": 500
+    },
+    {
+      "station": "Rohini, Delhi",
+      "city": "Delhi",
+      "latitude": 28.7495,
+      "longitude": 77.0565,
+      "aqi": 405
+    },
+    {
+      "station": "Jahangirpuri, Delhi",
+      "city": "Delhi",
+      "latitude": 28.7299,
+      "longitude": 77.1718,
+      "aqi": 500
+    },
+    {
+      "station": "Ghaziabad Vasundhara",
+      "city": "Ghaziabad",
+      "latitude": 28.6605,
+      "longitude": 77.3573,
+      "aqi": 500
+    },
+    {
+      "station": "ITO, Delhi",
+      "city": "Delhi",
+      "latitude": 28.6289,
+      "longitude": 77.2414,
+      "aqi": 500
+    },
+    {
+      "station": "Gurugram Sec 51",
+      "city": "Gurugram",
+      "latitude": 28.423,
+      "longitude": 77.047,
+      "aqi": 500
+    },
+    {
+      "station": "Dwarka Sec 8, Delhi",
+      "city": "Delhi",
+      "latitude": 28.5708,
+      "longitude": 77.0712,
+      "aqi": 500
+    },
+    {
+      "station": "Gurugram Vikas Sadan",
+      "city": "Gurugram",
+      "latitude": 28.4502,
+      "longitude": 77.0266,
+      "aqi": 500
+    },
+    {
+      "station": "Bawana, Delhi",
+      "city": "Delhi",
+      "latitude": 28.7762,
+      "longitude": 77.051,
+      "aqi": 500
+    },
+    {
+      "station": "Greater Noida",
+      "city": "Noida",
+      "latitude": 28.4744,
+      "longitude": 77.504,
+      "aqi": 500
+    },
+    {
+      "station": "Anand Vihar, Delhi",
+      "city": "Delhi",
+      "latitude": 28.6469,
+      "longitude": 77.3164,
+      "aqi": 500
+    },
+    {
+      "station": "Faridabad New Town",
+      "city": "Faridabad",
+      "latitude": 28.3722,
+      "longitude": 77.3099,
+      "aqi": 500
+    },
+    {
+      "station": "Noida Sec 62",
+      "city": "Noida",
+      "latitude": 28.6246,
+      "longitude": 77.3649,
+      "aqi": 500
+    }
+  ],
+  "generated_at": "2026-07-05 12:20:23 IST"
+}

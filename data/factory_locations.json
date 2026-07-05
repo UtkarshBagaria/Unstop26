@@ -1,0 +1,562 @@
+[
+  {
+    "sl_no": "1",
+    "fd_no": "10",
+    "name": "Shiva Iron and Brass Works",
+    "inferred_zone": "Central",
+    "category": "Industrial"
+  },
+  {
+    "sl_no": "2",
+    "fd_no": "15",
+    "name": "Delhi Printing Press",
+    "inferred_zone": "Central",
+    "category": "Printing"
+  },
+  {
+    "sl_no": "3",
+    "fd_no": "19",
+    "name": "Govt of India Press",
+    "inferred_zone": "Central",
+    "category": "Printing"
+  },
+  {
+    "sl_no": "4",
+    "fd_no": "21",
+    "name": "The Stateman House",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "5",
+    "fd_no": "22",
+    "name": "Chronical Press",
+    "inferred_zone": "Central",
+    "category": "Printing"
+  },
+  {
+    "sl_no": "6",
+    "fd_no": "24",
+    "name": "Ishwar Industries",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "7",
+    "fd_no": "26",
+    "name": "Parag Distrill Water and Ice Factory",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "8",
+    "fd_no": "32",
+    "name": "The Delhi Flour Mills Co Ltd",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "9",
+    "fd_no": "34",
+    "name": "Delhi Electric Supply Undertaking",
+    "inferred_zone": "Central",
+    "category": "Energy"
+  },
+  {
+    "sl_no": "10",
+    "fd_no": "40",
+    "name": "Sewage Disposal Works",
+    "inferred_zone": "Central",
+    "category": "Industrial"
+  },
+  {
+    "sl_no": "11",
+    "fd_no": "41",
+    "name": "Indraprastha Power Generation Co Ltd",
+    "inferred_zone": "Central",
+    "category": "Energy"
+  },
+  {
+    "sl_no": "12",
+    "fd_no": "42",
+    "name": "Delhi Jal Board",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "13",
+    "fd_no": "82",
+    "name": "Dinbandhu Hosiery Mills",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "14",
+    "fd_no": "88",
+    "name": "Municipal Press",
+    "inferred_zone": "Central",
+    "category": "Printing"
+  },
+  {
+    "sl_no": "15",
+    "fd_no": "95",
+    "name": "Govt of India Press",
+    "inferred_zone": "Central",
+    "category": "Printing"
+  },
+  {
+    "sl_no": "16",
+    "fd_no": "97",
+    "name": "Nehru Hosiery Mills",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "17",
+    "fd_no": "99",
+    "name": "E P Rly Main Loco",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "18",
+    "fd_no": "121",
+    "name": "Ordiance Factory",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "19",
+    "fd_no": "127",
+    "name": "505 Army Base Workshop",
+    "inferred_zone": "East",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "20",
+    "fd_no": "139",
+    "name": "C P W D Auto",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "21",
+    "fd_no": "147",
+    "name": "Ajanta Iron and Steel Co",
+    "inferred_zone": "Central",
+    "category": "Industrial"
+  },
+  {
+    "sl_no": "22",
+    "fd_no": "149",
+    "name": "Gopi Nath Pvt Ltd",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "23",
+    "fd_no": "151",
+    "name": "Observatory Works India Metrological",
+    "inferred_zone": "Central",
+    "category": "Industrial"
+  },
+  {
+    "sl_no": "24",
+    "fd_no": "228",
+    "name": "Station Workshop",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "25",
+    "fd_no": "243",
+    "name": "Delhi Press",
+    "inferred_zone": "Central",
+    "category": "Printing"
+  },
+  {
+    "sl_no": "26",
+    "fd_no": "245",
+    "name": "Punjab Motor Workshop",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "27",
+    "fd_no": "248",
+    "name": "Standard Enamel Works",
+    "inferred_zone": "Central",
+    "category": "Industrial"
+  },
+  {
+    "sl_no": "28",
+    "fd_no": "250",
+    "name": "Crescent Printing Works Pvt Ltd",
+    "inferred_zone": "Central",
+    "category": "Printing"
+  },
+  {
+    "sl_no": "29",
+    "fd_no": "281",
+    "name": "Central Ordinace Depot",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "30",
+    "fd_no": "288",
+    "name": "Novex Private Ltd",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "31",
+    "fd_no": "304",
+    "name": "Imperial Ice Factory",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "32",
+    "fd_no": "308",
+    "name": "Racamaun Kashat Kumar",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "33",
+    "fd_no": "323",
+    "name": "Rohtas Engg Work Ltd",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "34",
+    "fd_no": "324",
+    "name": "Hamdard (Wak) Laboratories",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "35",
+    "fd_no": "331",
+    "name": "Hindustan Tin Factory",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "36",
+    "fd_no": "339",
+    "name": "Kasting Pvt Ltd",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "37",
+    "fd_no": "368",
+    "name": "Eastern Engg Works",
+    "inferred_zone": "Central",
+    "category": "Industrial"
+  },
+  {
+    "sl_no": "38",
+    "fd_no": "369",
+    "name": "Shriram Continer Works",
+    "inferred_zone": "Central",
+    "category": "Industrial"
+  },
+  {
+    "sl_no": "39",
+    "fd_no": "377",
+    "name": "Kumar Brass Sheet and Metal Works",
+    "inferred_zone": "Central",
+    "category": "Industrial"
+  },
+  {
+    "sl_no": "40",
+    "fd_no": "395",
+    "name": "Jain Engg Works",
+    "inferred_zone": "Central",
+    "category": "Industrial"
+  },
+  {
+    "sl_no": "41",
+    "fd_no": "398",
+    "name": "Edwart Knitwear (S) Pvt Ltd",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "42",
+    "fd_no": "403",
+    "name": "Gulab Chand Kapoor and Sons",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "43",
+    "fd_no": "416",
+    "name": "Grover Steel Pvt Rooling Mills Ltd",
+    "inferred_zone": "Central",
+    "category": "Industrial"
+  },
+  {
+    "sl_no": "44",
+    "fd_no": "423",
+    "name": "Badnwar and Co",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "45",
+    "fd_no": "429",
+    "name": "Sardar Almormian Factory",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "46",
+    "fd_no": "430",
+    "name": "Madan Half Tone Co",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "47",
+    "fd_no": "437",
+    "name": "Bhagwan Dass and Co Workshop",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "48",
+    "fd_no": "439",
+    "name": "Northren Railway Printing Press",
+    "inferred_zone": "Central",
+    "category": "Printing"
+  },
+  {
+    "sl_no": "49",
+    "fd_no": "441",
+    "name": "Shourie Equipment Mfg Pvt Ltd",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "50",
+    "fd_no": "444",
+    "name": "Prem Enamel Metal Factory",
+    "inferred_zone": "Central",
+    "category": "Industrial"
+  },
+  {
+    "sl_no": "51",
+    "fd_no": "445",
+    "name": "Delhi Engineering Works Pvt Ltd",
+    "inferred_zone": "Central",
+    "category": "Industrial"
+  },
+  {
+    "sl_no": "52",
+    "fd_no": "448",
+    "name": "Narvada Cold Storage and Ice Factory",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "53",
+    "fd_no": "451",
+    "name": "Natioanl Eombrodary Works",
+    "inferred_zone": "Central",
+    "category": "Industrial"
+  },
+  {
+    "sl_no": "54",
+    "fd_no": "459",
+    "name": "Standard Type Foundary",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "55",
+    "fd_no": "460",
+    "name": "Amar Glass Work",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "56",
+    "fd_no": "472",
+    "name": "Chawla Brass and Almomiam Co",
+    "inferred_zone": "Central",
+    "category": "Industrial"
+  },
+  {
+    "sl_no": "57",
+    "fd_no": "478",
+    "name": "Ram Body Builders",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "58",
+    "fd_no": "483",
+    "name": "Prem Engg Works",
+    "inferred_zone": "Central",
+    "category": "Industrial"
+  },
+  {
+    "sl_no": "59",
+    "fd_no": "488",
+    "name": "Inderaprastha Ice and Cold Storage",
+    "inferred_zone": "Central",
+    "category": "Cold Storage"
+  },
+  {
+    "sl_no": "60",
+    "fd_no": "499",
+    "name": "National Type Foundary",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "61",
+    "fd_no": "502",
+    "name": "Kamla Tyre Foundary (Regd)",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "62",
+    "fd_no": "509",
+    "name": "Allays and Foundation Co",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "63",
+    "fd_no": "527",
+    "name": "Jain Co",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "64",
+    "fd_no": "528",
+    "name": "Darbar Co Ltd",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "65",
+    "fd_no": "544",
+    "name": "Punjab Sort Gola Fae",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "66",
+    "fd_no": "545",
+    "name": "Bengal Weaving Factory",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "67",
+    "fd_no": "546",
+    "name": "American Rubber Mill Co (Regd)",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "68",
+    "fd_no": "551",
+    "name": "International Industries",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "69",
+    "fd_no": "556",
+    "name": "India Offret Press",
+    "inferred_zone": "Central",
+    "category": "Printing"
+  },
+  {
+    "sl_no": "70",
+    "fd_no": "558",
+    "name": "Sudershan steel and Rolling Mill",
+    "inferred_zone": "Central",
+    "category": "Industrial"
+  },
+  {
+    "sl_no": "71",
+    "fd_no": "561",
+    "name": "Central Works of DTC",
+    "inferred_zone": "Central",
+    "category": "Industrial"
+  },
+  {
+    "sl_no": "72",
+    "fd_no": "562",
+    "name": "D T C Workshop",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "73",
+    "fd_no": "565",
+    "name": "Sri Niwas Tin Factory",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "74",
+    "fd_no": "566",
+    "name": "Lajpal Polteries Pvt Ltd",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "75",
+    "fd_no": "573",
+    "name": "Frintial Printing and Furnishing Co",
+    "inferred_zone": "Central",
+    "category": "Printing"
+  },
+  {
+    "sl_no": "76",
+    "fd_no": "582",
+    "name": "Jolly Engg Works",
+    "inferred_zone": "Central",
+    "category": "Industrial"
+  },
+  {
+    "sl_no": "77",
+    "fd_no": "587",
+    "name": "Still bire Furniture Works",
+    "inferred_zone": "Central",
+    "category": "Industrial"
+  },
+  {
+    "sl_no": "78",
+    "fd_no": "593",
+    "name": "Punjab Manufacturing Corp",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "79",
+    "fd_no": "604",
+    "name": "Hindustan Fast Food Mfg Factory",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  },
+  {
+    "sl_no": "80",
+    "fd_no": "608",
+    "name": "Acme Battaries",
+    "inferred_zone": "Central",
+    "category": "Manufacturing"
+  }
+]
