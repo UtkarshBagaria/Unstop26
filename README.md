@@ -107,8 +107,6 @@ Unstop26/
 ├── tests/
 │   └── test_dashboard_generator.py  # Regression tests
 ├── index.html                       # Interactive dashboard UI
-├── presentation.html                # Presentation deck for judges
-├── demo_script.py                   # Automated walkthrough demo
 ├── DEPLOYMENT.md                    # Detailed deployment guide
 └── README.md                        # This file
 ```
@@ -170,20 +168,9 @@ Data Sources → Load & Enrich → Compute Metrics → AI Narrative → JSON API
 - **View hotspots map** with color-coded AQI severity
 - **Export data** via API: `http://127.0.0.1:8000/api/dashboard?selected_datetime=2020-01-02T12:00`
 
+
 ---
 
-## Running the Demo
-
-### Automated Demo Script
-```bash
-python demo_script.py
-```
-Walks through:
-1. Loading data (console output)
-2. Computing hotspots & correlations
-3. Generating AI narrative
-4. Displaying dashboard URL
-5. Sample API calls
 
 ### Manual Testing
 ```bash
@@ -395,9 +382,7 @@ This project was developed for the Unstop Hackathon 2026 (Theme: Smart Cities & 
 
 ## Judges' Quick Links
 
-📊 **Start Demo**: `python demo_script.py`  
 🚀 **Run Dashboard**: `python api/dashboard.py` → http://127.0.0.1:8000  
-📑 **Presentation**: Open `presentation.html` in browser  
 📋 **Deployment Guide**: See [DEPLOYMENT.md](DEPLOYMENT.md)  
 🧪 **Run Tests**: `pytest tests/ -v`
 

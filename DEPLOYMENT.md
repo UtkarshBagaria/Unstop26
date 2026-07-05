@@ -68,8 +68,6 @@ Unstop26/
 ├── tests/
 │   └── test_dashboard_generator.py
 ├── index.html                 # Interactive dashboard UI
-├── presentation.html          # Presentation deck
-├── demo_script.py            # Demo walkthrough
 └── README.md
 ```
 
