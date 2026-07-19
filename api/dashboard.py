@@ -25,7 +25,8 @@ class Handler(BaseHTTPRequestHandler):
         if parsed.path == '/api/dashboard':
             params = parse_qs(parsed.query)
             selected_datetime = params.get('selected_datetime', [None])[0]
-            data = build_summary(selected_datetime=selected_datetime)
+            forecast_station = params.get('station', [None])[0]
+            data = build_summary(selected_datetime=selected_datetime, forecast_station=forecast_station)
             body = json.dumps(data, cls=NumpyEncoder).encode('utf-8')
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')

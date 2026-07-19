@@ -3,644 +3,674 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Urban Air Quality Intelligence Platform</title>
+    <title>AirIntel — Urban Air Quality Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg: #0a0e1a;
+            --bg-2: #0f1524;
+            --panel: rgba(22, 29, 48, 0.72);
+            --panel-solid: #161d30;
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #e6ebf5;
+            --muted: #8a94ad;
+            --accent: #4f8cff;
+            --accent-2: #22d3ee;
+            --good: #2ecc71;
+            --satisfactory: #9acd32;
+            --moderate: #f1c40f;
+            --poor: #e67e22;
+            --very-poor: #e74c3c;
+            --severe: #8e44ad;
+            --radius: 16px;
         }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: #333;
-            padding: 20px;
+            font-family: 'Inter', system-ui, sans-serif;
+            background:
+                radial-gradient(1200px 600px at 15% -10%, rgba(79,140,255,0.15), transparent 60%),
+                radial-gradient(1000px 500px at 100% 0%, rgba(34,211,238,0.12), transparent 55%),
+                var(--bg);
+            color: var(--text);
             min-height: 100vh;
+            padding: 0 0 60px;
+            -webkit-font-smoothing: antialiased;
         }
+        .container { max-width: 1500px; margin: 0 auto; padding: 0 24px; }
 
-        .container {
-            max-width: 1600px;
-            margin: 0 auto;
+        /* Header */
+        header.top {
+            position: sticky; top: 0; z-index: 900;
+            backdrop-filter: blur(14px);
+            background: rgba(10, 14, 26, 0.82);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 0;
         }
+        .header-inner { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+        .brand { display: flex; align-items: center; gap: 12px; }
+        .brand .logo {
+            width: 42px; height: 42px; border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            display: grid; place-items: center; font-size: 22px;
+            box-shadow: 0 6px 20px rgba(79,140,255,0.4);
+        }
+        .brand h1 { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; }
+        .brand p { font-size: 12px; color: var(--muted); }
+        .controls { margin-left: auto; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .controls label { font-size: 12px; color: var(--muted); font-weight: 500; }
+        .controls input {
+            background: var(--panel-solid); border: 1px solid var(--border);
+            color: var(--text); padding: 9px 12px; border-radius: 10px; font-size: 13px;
+            font-family: inherit;
+        }
+        .btn {
+            background: linear-gradient(135deg, var(--accent), #3b6fd4);
+            color: #fff; border: none; padding: 9px 18px; border-radius: 10px;
+            font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit;
+            transition: transform .15s, box-shadow .15s;
+        }
+        .btn:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(79,140,255,0.35); }
+        .btn:active { transform: translateY(0); }
 
-        header {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        /* Ticker */
+        .ticker {
+            display: flex; align-items: center; gap: 12px;
+            background: linear-gradient(90deg, rgba(231,76,60,0.18), rgba(142,68,173,0.14));
+            border-bottom: 1px solid var(--border);
+            overflow: hidden; height: 42px; white-space: nowrap;
         }
+        .ticker .tag {
+            flex-shrink: 0; background: var(--very-poor); color: #fff;
+            font-size: 11px; font-weight: 700; letter-spacing: .08em;
+            padding: 4px 14px; height: 100%; display: flex; align-items: center;
+            position: relative; z-index: 2; box-shadow: 6px 0 12px rgba(10,14,26,0.9);
+        }
+        .ticker-track { display: inline-flex; gap: 64px; animation: scroll 90s linear infinite; padding-left: 40px; }
+        .ticker:hover .ticker-track { animation-play-state: paused; }
+        .ticker-track span { font-size: 13px; font-weight: 500; color: #ffe; }
+        @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-100%); } }
 
-        header h1 {
-            color: #1e3c72;
-            margin-bottom: 10px;
-        }
-
-        .time-selector {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            margin-top: 10px;
-        }
-
-        .time-selector input {
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        .time-selector button {
-            padding: 8px 16px;
-            background: #2a5298;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background 0.3s;
-        }
-
-        .time-selector button:hover {
-            background: #1e3c72;
-        }
-
-        .ai-summary-section {
-            background: white;
-            padding: 24px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            border-left: 6px solid #d9534f;
-        }
-
-        .ai-summary-section h2 {
-            color: #d9534f;
-            margin-bottom: 12px;
-            font-size: 18px;
-        }
-
-        .ai-summary-section .alert {
-            background: #fcf8e3;
-            border: 1px solid #faebcc;
-            padding: 12px;
-            border-radius: 4px;
-            margin-bottom: 16px;
-            color: #8a6d3b;
-            font-weight: 500;
-        }
-
-        .ai-summary-text {
-            line-height: 1.8;
-            color: #444;
-            font-size: 15px;
-        }
-
-        .grid-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .section {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .section h3 {
-            color: #1e3c72;
-            margin-bottom: 16px;
-            font-size: 16px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: color 0.3s;
-        }
-
-        .section h3:hover {
-            color: #2a5298;
-        }
-
-        .section h3 .toggle-icon {
-            font-size: 12px;
-        }
-
-        .drill-down {
-            display: none;
-            background: #f9f9f9;
-            padding: 16px;
-            border-radius: 4px;
-            margin-top: 12px;
-            border-left: 3px solid #2a5298;
-            max-height: 600px;
-            overflow-y: auto;
-        }
-
-        .drill-down.active {
-            display: block;
-        }
+        /* Layout */
+        .section-title { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; margin: 28px 0 14px; }
+        .grid { display: grid; gap: 18px; }
+        .cols-2 { grid-template-columns: 1fr 1fr; }
+        .cols-3 { grid-template-columns: repeat(3, 1fr); }
+        .cols-5 { grid-template-columns: repeat(5, 1fr); }
+        .cols-6 { grid-template-columns: repeat(6, 1fr); }
+        .span-2 { grid-column: span 2; }
 
         .card {
-            background: #f5f5f5;
-            padding: 12px;
-            margin-bottom: 10px;
-            border-radius: 4px;
-            border-left: 3px solid #2a5298;
-            cursor: pointer;
-            transition: all 0.3s;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            backdrop-filter: blur(10px);
         }
+        .card h3 { font-size: 15px; font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+        .card .sub { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
 
-        .card:hover {
-            background: #ede7d9;
-            transform: translateX(4px);
-        }
+        /* KPI */
+        .kpi { text-align: left; position: relative; overflow: hidden; }
+        .kpi .k-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; font-weight: 600; }
+        .kpi .k-value { font-size: 30px; font-weight: 800; margin-top: 6px; letter-spacing: -0.02em; }
+        .kpi .k-note { font-size: 12px; color: var(--muted); margin-top: 4px; }
+        .kpi .k-bar { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; border-radius: 4px; }
 
-        .card-title {
-            font-weight: 600;
-            color: #1e3c72;
-            margin-bottom: 6px;
-        }
+        /* AI summary */
+        .ai-card { background: linear-gradient(135deg, rgba(79,140,255,0.10), rgba(34,211,238,0.06)); border: 1px solid rgba(79,140,255,0.25); }
+        .ai-card .body { font-size: 15px; line-height: 1.75; color: #dfe6f5; }
+        .badge-ai { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; letter-spacing: .05em; }
 
-        .card-content {
-            font-size: 13px;
-            color: #666;
-            line-height: 1.5;
-        }
+        /* Map */
+        #map { height: 460px; border-radius: 12px; overflow: hidden; z-index: 1; }
+        .legend { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; font-size: 11px; color: var(--muted); }
+        .legend .dot { display: inline-flex; align-items: center; gap: 5px; }
+        .legend .dot i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+        .leaflet-popup-content-wrapper { background: var(--panel-solid); color: var(--text); border-radius: 10px; }
+        .leaflet-popup-tip { background: var(--panel-solid); }
+        .leaflet-popup-content { font-family: inherit; }
 
-        .aqi-badge {
-            display: inline-block;
-            background: #d9534f;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 3px;
-            font-weight: bold;
-            font-size: 12px;
-            margin-left: 4px;
-        }
+        canvas { max-width: 100%; }
+        .chartbox { position: relative; height: 240px; width: 100%; }
+        .chartbox.tall { height: 260px; }
 
-        .aqi-badge.moderate {
-            background: #f0ad4e;
-        }
+        /* Pills / badges */
+        .pill { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; color: #08101f; }
+        .trend { font-size: 12px; font-weight: 600; }
+        .trend.rising { color: var(--very-poor); }
+        .trend.falling { color: var(--good); }
+        .trend.flat { color: var(--muted); }
 
-        .aqi-badge.good {
-            background: #5cb85c;
+        /* Lists */
+        .item {
+            display: flex; align-items: center; gap: 12px; padding: 12px;
+            border-radius: 12px; background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border); margin-bottom: 10px;
+            transition: background .2s, transform .2s;
         }
+        .item:hover { background: rgba(255,255,255,0.06); transform: translateX(3px); }
+        .item .rank { width: 26px; height: 26px; border-radius: 8px; background: var(--panel-solid); display: grid; place-items: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+        .item .body { flex: 1; min-width: 0; }
+        .item .body .t { font-weight: 600; font-size: 14px; }
+        .item .body .d { font-size: 12px; color: var(--muted); margin-top: 2px; }
+        .item .aqi { font-size: 18px; font-weight: 800; flex-shrink: 0; }
 
-        .aqi-badge.poor {
-            background: #d9534f;
-        }
+        .health-strip { display: flex; align-items: center; gap: 14px; padding: 16px; border-radius: 12px; }
+        .health-strip .ring { width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 16px; color: #08101f; flex-shrink: 0; }
 
-        .aqi-badge.very-poor {
-            background: #8b0000;
-            color: white;
-        }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th { text-align: left; padding: 10px 8px; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; border-bottom: 1px solid var(--border); }
+        td { padding: 10px 8px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+        tr:hover td { background: rgba(255,255,255,0.03); }
 
-        .stat-box {
-            display: inline-block;
-            background: #f0f0f0;
-            padding: 8px 12px;
-            border-radius: 4px;
-            margin-right: 10px;
-            font-size: 13px;
-            color: #555;
-        }
+        .scroll { max-height: 340px; overflow-y: auto; }
+        .scroll::-webkit-scrollbar { width: 8px; }
+        .scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 8px; }
 
-        .stat-value {
-            font-weight: bold;
-            color: #1e3c72;
-        }
+        .foot { text-align: center; color: var(--muted); font-size: 12px; margin-top: 30px; }
+        .loading { text-align: center; color: var(--muted); padding: 40px; font-size: 14px; }
 
-        .table-like {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
+        @media (max-width: 1100px) {
+            .cols-2, .cols-3 { grid-template-columns: 1fr; }
+            .cols-6 { grid-template-columns: repeat(3, 1fr); }
+            .span-2 { grid-column: span 1; }
         }
-
-        .table-like thead {
-            background: #f0f0f0;
-            border-bottom: 2px solid #ddd;
-        }
-
-        .table-like th {
-            padding: 8px;
-            text-align: left;
-            font-weight: 600;
-            color: #1e3c72;
-        }
-
-        .table-like td {
-            padding: 8px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .table-like tr:hover {
-            background: #fafafa;
-        }
-
-        .zone-badge {
-            display: inline-block;
-            background: #e7f3ff;
-            color: #004085;
-            padding: 4px 8px;
-            border-radius: 3px;
-            font-size: 12px;
-            margin-right: 4px;
-        }
-
-        .category-badge {
-            display: inline-block;
-            background: #f0e6ff;
-            color: #660066;
-            padding: 4px 8px;
-            border-radius: 3px;
-            font-size: 12px;
-            margin-right: 4px;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .link-text {
-            color: #2a5298;
-            text-decoration: underline;
-            cursor: pointer;
-            margin: 0 4px;
-        }
-
-        .link-text:hover {
-            color: #1e3c72;
-            text-decoration: none;
-        }
-
-        .timestamp {
-            font-size: 12px;
-            color: #999;
-            text-align: right;
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid #eee;
-        }
-
-        @media (max-width: 1200px) {
-            .grid-container {
-                grid-template-columns: 1fr;
-            }
-        }
+        @media (max-width: 620px) { .cols-5, .cols-6 { grid-template-columns: repeat(2, 1fr); } }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🌍 Urban Air Quality Intelligence Platform</h1>
-            <p style="color: #666; margin-top: 8px;">Real-time geospatial pollution analysis for India's urban centers</p>
-            <div class="time-selector">
-                <label for="datetime-input">Select Date & Time:</label>
-                <input type="datetime-local" id="datetime-input" value="2020-01-02T12:00">
-                <button onclick="loadDashboard()">Load Analysis</button>
+    <header class="top">
+        <div class="container header-inner">
+            <div class="brand">
+                <div class="logo">🌫️</div>
+                <div>
+                    <h1>AirIntel</h1>
+                    <p>Urban Air Quality Intelligence · Delhi-NCR + India</p>
+                </div>
             </div>
-        </header>
-
-        <!-- AI Summary Section - Full Width -->
-        <div class="ai-summary-section">
-            <h2>📊 Executive AI Analysis Summary</h2>
-            <div class="alert" id="alert-headline">Loading...</div>
-            <div class="ai-summary-text" id="ai-summary">
-                <p>Fetching comprehensive analysis...</p>
+            <div class="controls">
+                <label for="datetime-input">Analysis moment</label>
+                <input type="datetime-local" id="datetime-input" value="2023-09-28T09:00" min="2020-01-01T00:00" max="2025-12-31T23:00">
+                <button class="btn" onclick="loadDashboard()">Run Analysis</button>
             </div>
         </div>
+    </header>
 
-        <!-- Main Grid - Balanced Two-Column Layout -->
-        <div class="grid-container">
-            <!-- LEFT COLUMN -->
-            <div>
-                <!-- India Summary Section -->
-                <div class="section">
-                    <h3 onclick="toggleDrill('india-drill')">
-                        <span>🇮🇳 India-Wide Air Quality Snapshot</span>
-                        <span class="toggle-icon">▼</span>
-                    </h3>
-                    <div id="india-summary" style="font-size: 13px; margin-bottom: 12px;"></div>
-                    <div id="india-drill" class="drill-down">
-                        <p style="margin-bottom: 12px; color: #666;"><strong>Highest Polluted Cities:</strong></p>
-                        <table class="table-like">
-                            <thead>
-                                <tr>
-                                    <th>Rank</th>
-                                    <th>City</th>
-                                    <th>Avg AQI</th>
-                                    <th>Category</th>
-                                </tr>
-                            </thead>
-                            <tbody id="india-table-body"></tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Delhi Hotspots Section -->
-                <div class="section" style="margin-top: 20px;">
-                    <h3 onclick="toggleDrill('delhi-drill')">
-                        <span>🔴 Delhi-NCR Pollution Hotspots</span>
-                        <span class="toggle-icon">▼</span>
-                    </h3>
-                    <div id="delhi-preview" style="font-size: 13px; margin-bottom: 12px;"></div>
-                    <div id="delhi-drill" class="drill-down">
-                        <p style="margin-bottom: 12px; color: #666;"><strong>Critical Monitoring Stations:</strong></p>
-                        <div id="delhi-hotspots-list"></div>
-                    </div>
-                </div>
-
-                <!-- Traffic-Pollution Correlation -->
-                <div class="section" style="margin-top: 20px;">
-                    <h3 onclick="toggleDrill('traffic-drill')">
-                        <span>🚗 Traffic-Pollution Correlation by Time Period</span>
-                        <span class="toggle-icon">▼</span>
-                    </h3>
-                    <div id="traffic-preview" style="font-size: 13px; margin-bottom: 12px;"></div>
-                    <div id="traffic-drill" class="drill-down">
-                        <p style="margin-bottom: 12px; color: #666;"><strong>Pollution & Traffic by Period:</strong></p>
-                        <div id="traffic-periods-list"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- RIGHT COLUMN -->
-            <div>
-                <!-- Factory Zone Distribution -->
-                <div class="section">
-                    <h3 onclick="toggleDrill('factory-drill')">
-                        <span>🏭 Factory Source Attribution by Zone</span>
-                        <span class="toggle-icon">▼</span>
-                    </h3>
-                    <div id="factory-preview" style="font-size: 13px; margin-bottom: 12px;"></div>
-                    <div id="factory-drill" class="drill-down">
-                        <p style="margin-bottom: 12px; color: #666;"><strong>Factories by Delhi Zone:</strong></p>
-                        <div id="factory-zones-list"></div>
-                    </div>
-                </div>
-
-                <!-- Forecast Cards -->
-                <div class="section" style="margin-top: 20px;">
-                    <h3>⚠️ 24-72 Hour Risk Forecast</h3>
-                    <div id="forecast-cards"></div>
-                </div>
-
-                <!-- Source Attribution Priority -->
-                <div class="section" style="margin-top: 20px;">
-                    <h3>🎯 Enforcement Priority Index</h3>
-                    <div id="source-attribution"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Additional sections below the grid -->
-        <div class="section" style="margin-top: 20px;">
-            <h3>📋 Intervention Recommendations</h3>
-            <div id="recommendations"></div>
-        </div>
-
-        <div class="section" style="margin-top: 20px;">
-            <h3>📍 Station Location Map Data</h3>
-            <div style="font-size: 13px; color: #666;">
-                <p id="station-count" style="margin-bottom: 8px;"></p>
-                <div id="station-locations" style="max-height: 300px; overflow-y: auto;"></div>
-            </div>
-        </div>
-
-        <div class="timestamp" id="timestamp"></div>
+    <div class="ticker">
+        <div class="tag" id="ticker-tag">● LIVE ALERTS</div>
+        <div class="ticker-track" id="ticker-track"><span>Loading real-time alerts…</span></div>
     </div>
 
+    <div class="container">
+        <div id="dashboard">
+            <div class="loading">Loading intelligence layers…</div>
+        </div>
+        <div class="foot" id="foot"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script>
-        async function loadDashboard() {
-            const datetimeInput = document.getElementById('datetime-input').value;
-            const params = datetimeInput ? `?selected_datetime=${datetimeInput}` : '';
-            
-            try {
-                const response = await fetch(`/api/dashboard${params}`);
-                const data = await response.json();
-                
-                renderDashboard(data);
-            } catch (error) {
-                console.error('Error loading dashboard:', error);
-                alert('Failed to load dashboard. Make sure the server is running.');
-            }
+        let map, markerLayer, charts = {};
+        let forecastStation = null;
+        let stationCoords = {};
+
+        function forecastSubHtml(station, fm) {
+            fm = fm || {};
+            return `Station: <strong>${esc(station || 'N/A')}</strong> · ${esc((fm.method || 'model'))} · ` +
+                `<strong>${fm.improvement_pct != null ? fm.improvement_pct + '%' : 'N/A'}</strong> lower RMSE than persistence at 24h ` +
+                `(${fm.model_rmse ?? '—'} vs ${fm.persistence_rmse ?? '—'}, time-split holdout).`;
         }
 
-        function renderDashboard(data) {
-            // AI Summary Section (moved to top and expanded)
-            document.getElementById('alert-headline').textContent = data.alert_headline;
-            document.getElementById('ai-summary').innerHTML = `<p>${escapeHtml(data.ai_summary)}</p>`;
-
-            // India Summary
-            const topCities = data.india_summary.slice(0, 5).map(city => `<span class="link-text" onclick="toggleDrill('india-drill')">${city.city}</span>`).join(', ');
-            const indiaCities = data.india_summary.length;
-            document.getElementById('india-summary').innerHTML = `
-                <p><strong>${indiaCities} cities</strong> monitored. Top concern: <strong>${topCities}</strong></p>
-            `;
-            renderIndiaTable(data.india_summary);
-
-            // Delhi Hotspots
-            const topStations = (data.delhi_hotspots || []).slice(0, 3).map(h => `<strong>${h.station}</strong> (${Math.round(h.aqi)})`).join(', ');
-            document.getElementById('delhi-preview').innerHTML = `<p>${topStations || 'No data'}</p>`;
-            renderDelhiHotspots(data.delhi_hotspots || []);
-
-            // Traffic Correlation
-            if (data.traffic_correlation && data.traffic_correlation.by_period && data.traffic_correlation.by_period.length > 0) {
-                const highestAqi = data.traffic_correlation.highest_aqi_period || 'N/A';
-                const highestTraffic = data.traffic_correlation.highest_traffic_period || 'N/A';
-                document.getElementById('traffic-preview').innerHTML = `
-                    <p>Highest AQI: <strong>${highestAqi}</strong> | Highest Traffic: <strong>${highestTraffic}</strong></p>
-                `;
-                renderTrafficPeriods(data.traffic_correlation.by_period);
-            } else {
-                document.getElementById('traffic-preview').innerHTML = `<p>Traffic correlation data not available</p>`;
-                document.getElementById('traffic-periods-list').innerHTML = '<p>No traffic data available</p>';
-            }
-
-            // Factory Zones
-            const factoryByZone = data.factory_by_zone || {};
-            const zoneCount = Object.keys(factoryByZone).length;
-            const totalFactories = data.factory_count || 0;
-            const zones = Object.keys(factoryByZone).join(', ') || 'N/A';
-            document.getElementById('factory-preview').innerHTML = `
-                <p><strong>${totalFactories}</strong> registered factories across <strong>${zoneCount} zones</strong>: ${zones}</p>
-            `;
-            renderFactoryZones(factoryByZone);
-
-            // Forecast Cards
-            document.getElementById('forecast-cards').innerHTML = (data.forecast_cards || []).map((card, i) => `
-                <div class="card">
-                    <div class="card-title">
-                        ${card.station}
-                        <span class="aqi-badge ${getAqiBadgeClass(card.aqi_bucket)}">${card.aqi}</span>
-                    </div>
-                    <div class="card-content">
-                        <p>City: ${card.city}</p>
-                        <p>Peak Hour: ~${card.peak_hour}:00 | ${card.risk_note}</p>
-                    </div>
-                </div>
-            `).join('');
-
-            // Source Attribution
-            document.getElementById('source-attribution').innerHTML = (data.source_attribution || []).map((attr, i) => `
-                <div class="card">
-                    <div class="card-title">
-                        ${attr.station} (Priority: ${attr.priority})
-                        <span class="aqi-badge ${getAqiBadgeClass(attr.priority === 'Immediate' ? 'Severe' : 'Poor')}">${attr.aqi}</span>
-                    </div>
-                    <div class="card-content">
-                        <p>Traffic Signal: <strong>${attr.traffic_signal}</strong> | Factory Signal: <strong>${attr.factory_signal}</strong></p>
-                        <p>${attr.geospatial_note}</p>
-                    </div>
-                </div>
-            `).join('');
-
-            // Recommendations
-            document.getElementById('recommendations').innerHTML = (data.recommendations || []).map(rec => `
-                <div class="card">
-                    <div class="card-title">${rec.station} (${rec.priority})</div>
-                    <div class="card-content">
-                        <p><strong>Action:</strong> ${rec.action}</p>
-                        <p><strong>Rationale:</strong> ${rec.reason}</p>
-                    </div>
-                </div>
-            `).join('');
-
-            // Station Locations
-            const stationLocations = data.station_locations || [];
-            document.getElementById('station-count').textContent = `Total Stations: ${stationLocations.length}`;
-            document.getElementById('station-locations').innerHTML = `
-                <table class="table-like">
-                    <thead>
-                        <tr>
-                            <th>Station</th>
-                            <th>City</th>
-                            <th>AQI</th>
-                            <th>Coords</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${stationLocations.map(loc => `
-                            <tr>
-                                <td>${loc.station}</td>
-                                <td>${loc.city}</td>
-                                <td><strong>${loc.aqi}</strong></td>
-                                <td>${loc.latitude.toFixed(3)}, ${loc.longitude.toFixed(3)}</td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            `;
-
-            // Timestamp
-            document.getElementById('timestamp').textContent = `Generated at: ${data.generated_at}`;
+        function aqiColor(aqi) {
+            if (aqi <= 50) return '#2ecc71';
+            if (aqi <= 100) return '#9acd32';
+            if (aqi <= 200) return '#f1c40f';
+            if (aqi <= 300) return '#e67e22';
+            if (aqi <= 400) return '#e74c3c';
+            return '#8e44ad';
         }
-
-        function renderIndiaTable(cities) {
-            document.getElementById('india-table-body').innerHTML = cities.slice(0, 10).map((city, i) => `
-                <tr>
-                    <td>${i + 1}</td>
-                    <td><strong>${city.city}</strong></td>
-                    <td><strong>${Math.round(city.avg_aqi)}</strong></td>
-                    <td><span class="aqi-badge ${getAqiBadgeClass(getAqiBucket(city.avg_aqi))}">${getAqiBucket(city.avg_aqi)}</span></td>
-                </tr>
-            `).join('');
-        }
-
-        function renderDelhiHotspots(hotspots) {
-            document.getElementById('delhi-hotspots-list').innerHTML = hotspots.slice(0, 8).map((h, i) => `
-                <div class="card">
-                    <div class="card-title">
-                        ${i + 1}. ${h.station}
-                        <span class="aqi-badge ${getAqiBadgeClass(h.aqi_bucket)}">${Math.round(h.aqi)}</span>
-                    </div>
-                    <div class="card-content">
-                        <p>City: ${h.city} | Category: <strong>${h.aqi_bucket}</strong></p>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function renderTrafficPeriods(periods) {
-            if (!periods || periods.length === 0) {
-                document.getElementById('traffic-periods-list').innerHTML = '<p>No traffic data available</p>';
-                return;
-            }
-            document.getElementById('traffic-periods-list').innerHTML = periods.map(p => `
-                <div class="card">
-                    <div class="card-title">${p.period || 'Unknown Period'}</div>
-                    <div class="card-content">
-                        <p>Avg AQI: <strong>${Math.round(p.avg_aqi)}</strong> | Traffic Congestion: <strong>${Math.round(p.traffic_congestion_score || 0)}</strong></p>
-                        <p>Avg Speed: ${Math.round(p.avg_speed_kmph || 0)} km/h</p>
-                        ${p.correlation_insight ? `<p><em>${p.correlation_insight}</em></p>` : ''}
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function renderFactoryZones(factoryByZone) {
-            document.getElementById('factory-zones-list').innerHTML = Object.entries(factoryByZone).map(([zone, factories]) => `
-                <div style="margin-bottom: 16px;">
-                    <p style="margin-bottom: 8px;"><strong>Zone: ${zone}</strong> (${factories.length} factories)</p>
-                    <div>
-                        ${factories.slice(0, 5).map(f => `
-                            <div style="margin-bottom: 6px; padding: 8px; background: white; border-radius: 4px; border-left: 2px solid #ddd;">
-                                <p style="margin: 0; font-size: 12px;">
-                                    <span class="zone-badge">${zone}</span>
-                                    <span class="category-badge">${f.category}</span>
-                                </p>
-                                <p style="margin: 4px 0 0 0; color: #666; font-size: 12px;">${f.name}</p>
-                            </div>
-                        `).join('')}
-                        ${factories.length > 5 ? `<p style="font-size: 12px; color: #999; margin-top: 6px;">... and ${factories.length - 5} more</p>` : ''}
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function getAqiBucket(aqi) {
+        function aqiBucket(aqi) {
             if (aqi <= 50) return 'Good';
-            if (aqi <= 100) return 'Moderate';
-            if (aqi <= 200) return 'Poor';
-            if (aqi <= 300) return 'Very Poor';
+            if (aqi <= 100) return 'Satisfactory';
+            if (aqi <= 200) return 'Moderate';
+            if (aqi <= 300) return 'Poor';
+            if (aqi <= 400) return 'Very Poor';
             return 'Severe';
         }
-
-        function getAqiBadgeClass(bucket) {
-            if (!bucket) return 'poor';
-            const b = String(bucket).toLowerCase();
-            if (b.includes('good')) return 'good';
-            if (b.includes('moderate')) return 'moderate';
-            if (b.includes('poor') && !b.includes('very')) return 'poor';
-            if (b.includes('very') || b.includes('severe') || b.includes('immediate')) return 'very-poor';
-            return 'poor';
+        function esc(t) {
+            if (t == null) return '';
+            return String(t).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m]));
         }
 
-        function toggleDrill(id) {
-            const elem = document.getElementById(id);
-            if (elem) {
-                elem.classList.toggle('active');
+        async function loadDashboard() {
+            forecastStation = null;
+            const dt = document.getElementById('datetime-input').value;
+            const params = dt ? `?selected_datetime=${dt}` : '';
+            document.getElementById('dashboard').innerHTML = '<div class="loading">Analysing air quality intelligence…</div>';
+            try {
+                const res = await fetch(`/api/dashboard${params}`);
+                const data = await res.json();
+                render(data);
+            } catch (e) {
+                console.error(e);
+                document.getElementById('dashboard').innerHTML = '<div class="card"><h3>⚠️ Failed to load</h3><p class="sub">Make sure the server is running: <code>python api/dashboard.py</code></p></div>';
             }
         }
 
-        function escapeHtml(text) {
-            if (!text) return '';
-            const map = {
-                '&': '&amp;',
-                '<': '&lt;',
-                '>': '&gt;',
-                '"': '&quot;',
-                "'": '&#039;'
-            };
-            return text.replace(/[&<>"']/g, m => map[m]);
+        async function reloadForecast() {
+            const dt = document.getElementById('datetime-input').value;
+            const params = new URLSearchParams();
+            if (dt) params.set('selected_datetime', dt);
+            if (forecastStation) params.set('station', forecastStation);
+            const sub = document.getElementById('forecast-sub');
+            if (sub) sub.style.opacity = '0.5';
+            try {
+                const res = await fetch(`/api/dashboard?${params.toString()}`);
+                const data = await res.json();
+                renderForecast(data.aqi_forecast || []);
+                if (sub) { sub.innerHTML = forecastSubHtml(data.forecast_station, data.forecast_meta || {}); sub.style.opacity = '1'; }
+            } catch (e) { console.error(e); if (sub) sub.style.opacity = '1'; }
         }
 
-        // Load dashboard on page load
+        function onForecastStationChange() {
+            forecastStation = document.getElementById('forecast-select').value;
+            if (map && stationCoords[forecastStation]) map.flyTo(stationCoords[forecastStation], 12, { duration: 0.8 });
+            reloadForecast();
+        }
+
+        function focusStation(name) {
+            if (!name) return;
+            forecastStation = name;
+            const sel = document.getElementById('forecast-select');
+            if (sel) sel.value = name;
+            if (map && stationCoords[name]) map.flyTo(stationCoords[name], 12, { duration: 0.8 });
+            reloadForecast();
+            document.querySelector('#forecast-select').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function render(data) {
+            renderTicker(data.alert_ticker || [data.alert_headline]);
+
+            const oh = data.overall_health || {};
+            const fm = data.forecast_meta || {};
+            const w = data.weather || {};
+            const html = `
+                ${kpiRow(data)}
+
+                <div class="grid cols-2" style="margin-top:18px;">
+                    <div class="card ai-card span-2">
+                        <h3><span class="badge-ai">AI ANALYST</span> Executive Intelligence Summary</h3>
+                        <div class="sub">Generated for ${esc(data.selected_datetime)} · fuses national + Delhi-NCR + traffic + industrial + weather layers</div>
+                        <div class="body">${esc(data.ai_summary)}</div>
+                    </div>
+                </div>
+
+                <div class="section-title">Geospatial Intelligence</div>
+                <div class="grid cols-2">
+                    <div class="card">
+                        <h3>🗺️ Live AQI Station Map — Delhi-NCR</h3>
+                        <div class="sub">Marker size & colour encode station AQI severity. Click a marker for detail.</div>
+                        <div id="map"></div>
+                        <div class="legend">
+                            <span class="dot"><i style="background:#2ecc71"></i>Good</span>
+                            <span class="dot"><i style="background:#9acd32"></i>Satisfactory</span>
+                            <span class="dot"><i style="background:#f1c40f"></i>Moderate</span>
+                            <span class="dot"><i style="background:#e67e22"></i>Poor</span>
+                            <span class="dot"><i style="background:#e74c3c"></i>Very Poor</span>
+                            <span class="dot"><i style="background:#8e44ad"></i>Severe</span>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3>🎯 Source Attribution by Dominant Pollutant</h3>
+                        <div class="sub">Pollutant fingerprint → most likely emission source, with confidence.</div>
+                        <div class="scroll" id="attribution"></div>
+                    </div>
+                </div>
+
+                <div class="section-title">Forecasting &amp; Trends</div>
+                <div class="grid cols-2">
+                    <div class="card">
+                        <h3>🔮 72-Hour Hyperlocal Forecast
+                            <select id="forecast-select" onchange="onForecastStationChange()" style="margin-left:auto;background:var(--panel-solid);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:5px 8px;font-size:12px;font-family:inherit;max-width:220px;"></select>
+                        </h3>
+                        <div class="sub" id="forecast-sub">${forecastSubHtml(data.forecast_station, fm)}</div>
+                        <div class="chartbox"><canvas id="forecastChart"></canvas></div>
+                    </div>
+                    <div class="card">
+                        <h3>📈 National AQI Trend (recent window)</h3>
+                        <div class="sub">Mean AQI across monitored Indian cities over time.</div>
+                        <div class="chartbox"><canvas id="trendChart"></canvas></div>
+                    </div>
+                </div>
+
+                <div class="grid cols-3" style="margin-top:18px;">
+                    <div class="card">
+                        <h3>🧪 Pollutant Mix</h3>
+                        <div class="sub">Share of normalised sub-index (NCR average).</div>
+                        <div class="chartbox"><canvas id="mixChart"></canvas></div>
+                    </div>
+                    <div class="card span-2">
+                        <h3>🏙️ Multi-City NCR Comparison</h3>
+                        <div class="sub">Current AQI, dominant pollutant and 24h direction across the five NCR cities.</div>
+                        <div class="chartbox"><canvas id="cityChart"></canvas></div>
+                        <div id="cityRows" style="margin-top:12px;"></div>
+                    </div>
+                </div>
+
+                <div class="section-title">Public Health &amp; Enforcement</div>
+                <div class="grid cols-3">
+                    <div class="card">
+                        <h3>🩺 Health Risk Advisory</h3>
+                        <div class="sub">Ward-level guidance based on current NCR average AQI.</div>
+                        <div class="health-strip" style="background:${(oh.color||'#333')}22;border:1px solid ${(oh.color||'#333')}55;">
+                            <div class="ring" style="background:${oh.color||'#666'}">${oh.aqi ?? '—'}</div>
+                            <div>
+                                <div style="font-weight:700;color:${oh.color||'#fff'}">${esc(oh.category||'')}</div>
+                                <div style="font-size:12px;color:var(--muted);margin-top:2px;">${esc(oh.message||'')}</div>
+                            </div>
+                        </div>
+                        <div style="margin-top:12px;font-size:13px;line-height:1.6;"><strong>Protective action:</strong> ${esc(oh.protective_action||'')}</div>
+                        <div id="healthList" style="margin-top:12px;"></div>
+                    </div>
+                    <div class="card">
+                        <h3>🔴 Delhi-NCR Hotspots</h3>
+                        <div class="sub">Highest-AQI monitoring stations right now.</div>
+                        <div class="scroll" id="hotspots"></div>
+                    </div>
+                    <div class="card">
+                        <h3>📋 Enforcement Priorities</h3>
+                        <div class="sub">Ranked, evidence-backed intervention recommendations.</div>
+                        <div class="scroll" id="recs"></div>
+                    </div>
+                </div>
+
+                <div class="section-title">Contributing Factors</div>
+                <div class="grid cols-3">
+                    <div class="card">
+                        <h3>🌬️ Weather &amp; Dispersion</h3>
+                        <div class="sub">Meteorology governing how pollutants accumulate or clear.</div>
+                        <div id="weather"></div>
+                    </div>
+                    <div class="card">
+                        <h3>🚗 Traffic ↔ Pollution</h3>
+                        <div class="sub">Congestion vs AQI by time-of-day period.</div>
+                        <div id="traffic"></div>
+                    </div>
+                    <div class="card">
+                        <h3>🏭 Industrial Sources by Zone</h3>
+                        <div class="sub">Registered factories mapped to Delhi zones.</div>
+                        <div class="scroll" id="factories"></div>
+                    </div>
+                </div>
+
+                <div class="section-title">India-Wide Snapshot</div>
+                <div class="card">
+                    <h3>🇮🇳 Most Polluted Cities Nationwide</h3>
+                    <div class="sub">${(data.india_summary||[]).length} cities ranked by average AQI.</div>
+                    <table><thead><tr><th>#</th><th>City</th><th>Avg AQI</th><th>Category</th></tr></thead>
+                    <tbody id="indiaTable"></tbody></table>
+                </div>
+            `;
+            document.getElementById('dashboard').innerHTML = html;
+
+            renderMap(data.station_locations || []);
+            populateForecastSelect(data.forecast_station_options || [], data.forecast_station);
+            renderAttribution(data.pollutant_attribution || data.source_attribution || []);
+            renderForecast(data.aqi_forecast || []);
+            renderTrend(data.national_trends || []);
+            renderMix(data.pollutant_mix || {});
+            renderCities(data.city_comparison || []);
+            renderHealth(data.health_advisories || []);
+            renderHotspots(data.delhi_hotspots || []);
+            renderRecs(data.source_attribution || []);
+            renderWeather(w);
+            renderTraffic(data.traffic_correlation || {});
+            renderFactories(data.factory_by_zone || {});
+            renderIndia(data.india_summary || []);
+
+            document.getElementById('foot').textContent = `Generated ${data.generated_at} · ${data.station_count} stations · ${data.city_count} NCR cities`;
+        }
+
+        function kpiRow(data) {
+            const oh = data.overall_health || {};
+            const fm = data.forecast_meta || {};
+            const w = data.weather || {};
+            const kpis = [
+                { label: 'NCR Avg AQI', value: data.avg_aqi ?? '—', note: oh.category || '', color: aqiColor(data.avg_aqi || 0) },
+                { label: 'Peak Station AQI', value: data.max_aqi ?? '—', note: 'worst hotspot', color: aqiColor(data.max_aqi || 0) },
+                { label: 'Stations Live', value: data.station_count ?? '—', note: `${data.city_count || 0} cities`, color: '#4f8cff' },
+                { label: 'Dispersion', value: w.dispersion || '—', note: `wind ${w.wind_speed ?? '—'} km/h`, color: w.dispersion === 'Poor' ? '#e74c3c' : (w.dispersion === 'Good' ? '#2ecc71' : '#f1c40f') },
+                { label: 'Factories Tracked', value: data.factory_count ?? '—', note: `${Object.keys(data.factory_by_zone||{}).length} zones`, color: '#8e44ad' },
+            ];
+            return `<div class="grid cols-5">` + kpis.map(k => `
+                <div class="card kpi">
+                    <div class="k-bar" style="background:${k.color}"></div>
+                    <div class="k-label">${k.label}</div>
+                    <div class="k-value" style="color:${k.color}">${k.value}</div>
+                    <div class="k-note">${esc(k.note)}</div>
+                </div>`).join('') + `</div>`;
+        }
+
+        function renderTicker(alerts) {
+            const items = (alerts && alerts.length ? alerts : ['No active alerts']);
+            const track = document.getElementById('ticker-track');
+            track.innerHTML = items.concat(items).map(a => `<span>${esc(a)}</span>`).join('');
+            const critical = items.some(a => /SEVERE/i.test(a));
+            document.getElementById('ticker-tag').style.background = critical ? '#8e44ad' : '#e67e22';
+        }
+
+        function renderMap(stations) {
+            const el = document.getElementById('map');
+            if (!el || typeof L === 'undefined') { if (el) el.innerHTML = '<p class="sub" style="padding:20px">Map library unavailable (offline).</p>'; return; }
+            if (map) { map.remove(); map = null; }
+            map = L.map('map', { scrollWheelZoom: false }).setView([28.61, 77.20], 10);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 19
+            }).addTo(map);
+            stations.forEach(s => {
+                stationCoords[s.station] = [s.latitude, s.longitude];
+                const r = 8 + Math.min(22, (s.aqi / 500) * 22);
+                L.circleMarker([s.latitude, s.longitude], {
+                    radius: r, fillColor: aqiColor(s.aqi), color: '#fff', weight: 1, opacity: 0.9, fillOpacity: 0.75
+                }).addTo(map).on('click', () => focusStation(s.station)).bindPopup(
+                    `<strong>${esc(s.station)}</strong><br>${esc(s.city)}<br>AQI <b style="color:${aqiColor(s.aqi)}">${s.aqi}</b> · ${aqiBucket(s.aqi)}<br><span style="color:#22d3ee;font-size:11px">Click to forecast this station</span>`
+                );
+            });
+            setTimeout(() => map.invalidateSize(), 200);
+        }
+
+        function renderAttribution(list) {
+            document.getElementById('attribution').innerHTML = list.map((a, i) => `
+                <div class="item" onclick="focusStation('${esc(a.station).replace(/'/g, "\\'")}')" style="cursor:pointer" title="Forecast this station">
+                    <div class="rank">${i + 1}</div>
+                    <div class="body">
+                        <div class="t">${esc(a.station)} <span class="pill" style="background:${aqiColor(a.aqi)}">${esc(a.dominant_pollutant || '')}</span></div>
+                        <div class="d">${esc(a.primary_source || a.geospatial_note || '')}${a.confidence != null ? ` · confidence ${Math.round(a.confidence*100)}%` : ''}</div>
+                    </div>
+                    <div class="aqi" style="color:${aqiColor(a.aqi)}">${a.aqi}</div>
+                </div>`).join('') || '<p class="sub">No attribution data.</p>';
+        }
+
+        function makeLineChart(id, labels, data, label, color) {
+            const ctx = document.getElementById(id);
+            if (!ctx || typeof Chart === 'undefined') return;
+            if (charts[id]) charts[id].destroy();
+            charts[id] = new Chart(ctx, {
+                type: 'line',
+                data: { labels, datasets: [{ label, data, borderColor: color, backgroundColor: color + '22', fill: true, tension: 0.35, pointRadius: 0, borderWidth: 2 }] },
+                options: baseChartOpts()
+            });
+        }
+        function populateForecastSelect(options, selected) {
+            const sel = document.getElementById('forecast-select');
+            if (!sel) return;
+            sel.innerHTML = options.map(s => `<option value="${esc(s)}"${s === selected ? ' selected' : ''}>${esc(s)}</option>`).join('');
+        }
+
+        function baseChartOpts() {
+            return {
+                responsive: true, maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: { labels: { color: '#8a94ad', font: { size: 11 } } },
+                    tooltip: {
+                        backgroundColor: 'rgba(15,21,36,0.95)', borderColor: 'rgba(255,255,255,0.12)', borderWidth: 1,
+                        titleColor: '#e6ebf5', bodyColor: '#e6ebf5', padding: 10, cornerRadius: 8, displayColors: false
+                    }
+                },
+                scales: {
+                    x: { ticks: { color: '#8a94ad', maxTicksLimit: 8, font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                    y: { ticks: { color: '#8a94ad', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.05)' } }
+                }
+            };
+        }
+
+        function renderForecast(points) {
+            const labels = points.map(p => p.offset_h === 0 ? 'Now' : '+' + p.offset_h + 'h');
+            const vals = points.map(p => p.aqi);
+            const dts = points.map(p => p.datetime);
+            const ctx = document.getElementById('forecastChart');
+            if (!ctx || typeof Chart === 'undefined') return;
+            if (charts.forecastChart) charts.forecastChart.destroy();
+            charts.forecastChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels, datasets: [{
+                        label: 'Forecast AQI', data: vals, borderColor: '#22d3ee',
+                        segment: { borderColor: c => aqiColor(c.p1.parsed.y) },
+                        backgroundColor: 'rgba(34,211,238,0.12)', fill: true, tension: 0.3,
+                        pointRadius: vals.map((v, i) => i === 0 ? 5 : 3),
+                        pointBackgroundColor: vals.map(v => aqiColor(v)),
+                        pointBorderColor: '#0f1524', pointHoverRadius: 7, borderWidth: 2
+                    }]
+                },
+                options: Object.assign(baseChartOpts(), {
+                    plugins: Object.assign(baseChartOpts().plugins, {
+                        legend: { display: false },
+                        tooltip: Object.assign(baseChartOpts().plugins.tooltip, {
+                            callbacks: {
+                                title: items => items[0].label === 'Now' ? 'Current reading' : dts[items[0].dataIndex],
+                                label: c => `AQI ${c.parsed.y} · ${aqiBucket(c.parsed.y)}`
+                            }
+                        })
+                    })
+                })
+            });
+        }
+
+        function renderTrend(trends) {
+            makeLineChart('trendChart', trends.map(t => t.date), trends.map(t => t.avg_aqi), 'National avg AQI', '#4f8cff');
+        }
+
+        function renderMix(mix) {
+            const ctx = document.getElementById('mixChart');
+            if (!ctx || typeof Chart === 'undefined' || !mix.labels) return;
+            if (charts.mixChart) charts.mixChart.destroy();
+            const palette = ['#e74c3c', '#e67e22', '#f1c40f', '#8e44ad', '#22d3ee', '#2ecc71'];
+            charts.mixChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: { labels: mix.labels, datasets: [{ data: mix.values, backgroundColor: palette, borderColor: '#0f1524', borderWidth: 2 }] },
+                options: { responsive: true, maintainAspectRatio: false, cutout: '62%', plugins: { legend: { position: 'right', labels: { color: '#8a94ad', font: { size: 11 }, boxWidth: 12 } } } }
+            });
+        }
+
+        function renderCities(cities) {
+            const ctx = document.getElementById('cityChart');
+            if (ctx && typeof Chart !== 'undefined') {
+                if (charts.cityChart) charts.cityChart.destroy();
+                charts.cityChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: { labels: cities.map(c => c.city), datasets: [{ label: 'Avg AQI', data: cities.map(c => c.avg_aqi), backgroundColor: cities.map(c => aqiColor(c.avg_aqi)), borderRadius: 6 }] },
+                    options: baseChartOpts()
+                });
+            }
+            const arrow = { rising: '▲', falling: '▼', flat: '▬' };
+            document.getElementById('cityRows').innerHTML = cities.map(c => `
+                <span style="display:inline-flex;align-items:center;gap:6px;margin:4px 10px 4px 0;font-size:12px;">
+                    <b>${esc(c.city)}</b>
+                    <span class="pill" style="background:${aqiColor(c.avg_aqi)}">${c.avg_aqi}</span>
+                    <span style="color:var(--muted)">${esc(c.dominant_pollutant)}</span>
+                    <span class="trend ${c.trend}">${arrow[c.trend] || ''} ${c.trend}</span>
+                </span>`).join('');
+        }
+
+        function renderHealth(list) {
+            document.getElementById('healthList').innerHTML = list.slice(0, 4).map(h => `
+                <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--border);">
+                    <span class="pill" style="background:${h.color}">${h.aqi}</span>
+                    <span style="font-size:12px;"><b>${esc(h.station)}</b> — ${esc(h.category)}</span>
+                </div>`).join('');
+        }
+
+        function renderHotspots(hotspots) {
+            document.getElementById('hotspots').innerHTML = hotspots.slice(0, 8).map((h, i) => `
+                <div class="item" onclick="focusStation('${esc(h.station).replace(/'/g, "\\'")}')" style="cursor:pointer" title="Forecast this station">
+                    <div class="rank">${i + 1}</div>
+                    <div class="body"><div class="t">${esc(h.station)}</div><div class="d">${esc(h.city)} · ${aqiBucket(h.aqi)}</div></div>
+                    <div class="aqi" style="color:${aqiColor(h.aqi)}">${Math.round(h.aqi)}</div>
+                </div>`).join('');
+        }
+
+        function renderRecs(list) {
+            document.getElementById('recs').innerHTML = list.map(a => `
+                <div class="item">
+                    <div class="body">
+                        <div class="t">${esc(a.station)} <span class="pill" style="background:${a.priority==='Immediate'?'#e74c3c':'#e67e22'}">${esc(a.priority)}</span></div>
+                        <div class="d">Traffic: <b>${esc(a.traffic_signal)}</b> · Factory: <b>${esc(a.factory_signal)}</b>${a.primary_source ? ` · ${esc(a.primary_source)}` : ''}</div>
+                    </div>
+                    <div class="aqi" style="color:${aqiColor(a.aqi)}">${a.aqi}</div>
+                </div>`).join('');
+        }
+
+        function renderWeather(w) {
+            const metrics = [
+                ['Wind', (w.wind_speed ?? '—') + ' km/h'], ['Humidity', (w.humidity ?? '—') + '%'],
+                ['Temp', (w.temperature ?? '—') + '°C'], ['Visibility', (w.visibility ?? '—') + ' km']
+            ];
+            document.getElementById('weather').innerHTML = `
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+                    ${metrics.map(m => `<div style="background:rgba(255,255,255,0.03);padding:10px;border-radius:10px;"><div style="font-size:11px;color:var(--muted)">${m[0]}</div><div style="font-weight:700;font-size:16px;">${m[1]}</div></div>`).join('')}
+                </div>
+                <div class="pill" style="background:${w.dispersion==='Poor'?'#e74c3c':(w.dispersion==='Good'?'#2ecc71':'#f1c40f')};">${esc(w.dispersion)} dispersion</div>
+                <p style="font-size:12px;color:var(--muted);margin-top:10px;line-height:1.5;">${esc(w.note)}</p>`;
+        }
+
+        function renderTraffic(tc) {
+            const periods = tc.by_period || [];
+            if (!periods.length) { document.getElementById('traffic').innerHTML = '<p class="sub">No traffic data.</p>'; return; }
+            document.getElementById('traffic').innerHTML = `
+                <p style="font-size:12px;color:var(--muted);margin-bottom:10px;">Highest AQI: <b style="color:#fff">${esc(tc.highest_aqi_period)}</b> · Peak traffic: <b style="color:#fff">${esc(tc.highest_traffic_period)}</b></p>
+                ${periods.map(p => `
+                    <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--border);">
+                        <span style="width:80px;font-size:13px;font-weight:600;">${esc(p.period)}</span>
+                        <span class="pill" style="background:${aqiColor(p.avg_aqi)}">${Math.round(p.avg_aqi)}</span>
+                        <span style="font-size:12px;color:var(--muted)">${Math.round(p.avg_speed_kmph||0)} km/h avg</span>
+                    </div>`).join('')}`;
+        }
+
+        function renderFactories(byZone) {
+            document.getElementById('factories').innerHTML = Object.entries(byZone).map(([zone, fs]) => `
+                <div style="margin-bottom:12px;">
+                    <div style="font-weight:700;font-size:13px;margin-bottom:6px;">${esc(zone)} <span style="color:var(--muted);font-weight:400;">· ${fs.length} sites</span></div>
+                    ${fs.slice(0, 3).map(f => `<div style="font-size:12px;color:var(--muted);padding:3px 0;">• ${esc(f.name)} <span style="color:#22d3ee">(${esc(f.category)})</span></div>`).join('')}
+                    ${fs.length > 3 ? `<div style="font-size:11px;color:var(--muted);">…and ${fs.length - 3} more</div>` : ''}
+                </div>`).join('') || '<p class="sub">No factory data.</p>';
+        }
+
+        function renderIndia(cities) {
+            document.getElementById('indiaTable').innerHTML = cities.slice(0, 12).map((c, i) => `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td><b>${esc(c.city)}</b></td>
+                    <td><span class="pill" style="background:${aqiColor(c.avg_aqi)}">${Math.round(c.avg_aqi)}</span></td>
+                    <td>${aqiBucket(c.avg_aqi)}</td>
+                </tr>`).join('');
+        }
+
         loadDashboard();
     </script>
 </body>

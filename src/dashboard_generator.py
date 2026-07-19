@@ -10,6 +10,18 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).parent))
 from factory_locations import enrich_factory_locations, save_factory_locations
 from traffic_pollution import analyze_traffic_pollution_correlation
+from air_intelligence import (
+    pollutant_attribution,
+    pollutant_mix,
+    forecast_station,
+    forecast_accuracy,
+    forecast_station_ml,
+    train_forecast_model,
+    diurnal_profile,
+    health_advisory,
+    city_comparison,
+    weather_dispersion,
+)
 
 
 class NumpyEncoder(json.JSONEncoder):
@@ -72,16 +84,50 @@ def _call_ollama(prompt: str, max_length: int = 1000) -> str:
         return ''
 
 
-def build_summary(path: Path = DELHI_AQI_PATH, selected_datetime: str | None = None) -> dict:
-    delhi_df = load_delhi_dataset(path)
-    national_df = load_national_dataset()
+# --- Lightweight caches so static datasets are parsed only once -----------
+_CACHE: dict = {}
+
+
+def _cached_delhi(path: Path = DELHI_AQI_PATH) -> pd.DataFrame:
+    if 'delhi' not in _CACHE:
+        _CACHE['delhi'] = load_delhi_dataset(path)
+    return _CACHE['delhi']
+
+
+def _cached_national() -> pd.DataFrame:
+    if 'national' not in _CACHE:
+        _CACHE['national'] = load_national_dataset()
+    return _CACHE['national']
+
+
+def _cached_factories() -> list[dict]:
+    if 'factories' not in _CACHE:
+        enriched = enrich_factory_locations(load_factory_entries())
+        save_factory_locations(load_factory_entries())
+        _CACHE['factories'] = enriched
+    return _CACHE['factories']
+
+
+def _cached_traffic_correlation() -> dict:
+    if 'traffic_corr' not in _CACHE:
+        _CACHE['traffic_corr'] = analyze_traffic_pollution_correlation()
+    return _CACHE['traffic_corr']
+
+
+def _cached_forecast_model(path: Path = DELHI_AQI_PATH):
+    if 'forecast_model' not in _CACHE:
+        _CACHE['forecast_model'] = train_forecast_model(_cached_delhi(path))
+    return _CACHE['forecast_model']
+
+
+def build_summary(path: Path = DELHI_AQI_PATH, selected_datetime: str | None = None,
+                  forecast_station: str | None = None) -> dict:
+    delhi_df = _cached_delhi(path)
+    national_df = _cached_national()
     traffic_df = load_traffic_dataset()
-    factory_entries = load_factory_entries()
-    
-    enriched_factories = enrich_factory_locations(factory_entries)
-    save_factory_locations(enriched_factories)
-    
-    traffic_correlation = analyze_traffic_pollution_correlation()
+    enriched_factories = _cached_factories()
+
+    traffic_correlation = _cached_traffic_correlation()
 
     if selected_datetime:
         selected_ts = pd.to_datetime(selected_datetime)
@@ -189,29 +235,101 @@ def build_summary(path: Path = DELHI_AQI_PATH, selected_datetime: str | None = N
 
     alert_headline = 'ALERT: AQI thresholds exceeded in multiple Delhi hotspots; enforcement escalation advised.' if latest['aqi'].mean() >= 250 else 'Stable conditions with moderate risk during evening traffic peaks.'
 
+    # --- Advanced intelligence layers -------------------------------------
+    pollutant_attr = pollutant_attribution(latest, top_n=6)
+    # Enrich source attribution with the dominant pollutant + true source.
+    attr_by_station = {p['station']: p for p in pollutant_attr}
+    for item in source_attribution_enhanced:
+        match = attr_by_station.get(item['station'])
+        if match:
+            item['dominant_pollutant'] = match['dominant_pollutant']
+            item['primary_source'] = match['primary_source']
+            item['confidence'] = match['confidence']
+
+    mix = pollutant_mix(latest)
+    weather = weather_dispersion(latest)
+    cities = city_comparison(latest, selected_df)
+
+    # Hyperlocal forecast for the worst hotspot (or a user-selected station).
+    available_stations = [h['station'] for h in top_hotspots]
+    if forecast_station and forecast_station in set(selected_df['station'].unique()):
+        focus_station = forecast_station
+    else:
+        focus_station = top_hotspots[0]['station'] if top_hotspots else None
+    trained = _cached_forecast_model()
+    if trained and focus_station:
+        aqi_forecast = forecast_station_ml(selected_df, trained, focus_station, selected_ts, horizon_hours=72)
+        forecast_meta = {
+            'model_rmse': trained['model_rmse'],
+            'persistence_rmse': trained['persistence_rmse'],
+            'improvement_pct': trained['improvement_pct'],
+            'overall_rmse': trained.get('overall_rmse'),
+            'horizon_h': trained['horizon_h'],
+            'method': trained['method'],
+            'n_train': trained.get('n_train'),
+            'n_test': trained.get('n_test'),
+        }
+    else:
+        aqi_forecast = forecast_station(selected_df, focus_station, selected_ts, horizon_hours=72) if focus_station else []
+        meta = forecast_accuracy(selected_df, focus_station) if focus_station else {}
+        meta['method'] = 'Seasonal-climatology blend (statistical fallback)'
+        forecast_meta = meta
+    diurnal_curve = diurnal_profile(selected_df, focus_station) if focus_station else []
+
+    # Health advisories for the top hotspots.
+    health_advisories = []
+    for hotspot in top_hotspots[:5]:
+        adv = health_advisory(hotspot['aqi'])
+        adv['station'] = hotspot['station']
+        adv['city'] = hotspot['city']
+        health_advisories.append(adv)
+    overall_health = health_advisory(latest['aqi'].mean())
+
+    # Running alert ticker: emit a message for every crossed threshold.
+    alert_ticker = []
+    severe = latest[latest['aqi'] >= 400]
+    very_poor = latest[(latest['aqi'] >= 300) & (latest['aqi'] < 400)]
+    for _, r in severe.iterrows():
+        alert_ticker.append(f"\u26a0 SEVERE: {r['station']} at AQI {int(r['aqi'])} — halt outdoor activity & trigger GRAP.")
+    for _, r in very_poor.head(4).iterrows():
+        alert_ticker.append(f"\u25b2 VERY POOR: {r['station']} at AQI {int(r['aqi'])} — deploy inspectors, restrict heavy traffic.")
+    if weather['dispersion'] == 'Poor':
+        alert_ticker.append(f"\U0001f32c Low wind ({weather['wind_speed']} km/h) — pollutants accumulating, worsening likely.")
+    if not alert_ticker:
+        alert_ticker.append('\u2714 No stations above the Very Poor threshold in the current window.')
+
+
     ai_prompt = (
         f"You are an expert urban air quality analyst for Delhi-NCR and India. "
         f"Provide a detailed, actionable summary including: "
         f"(1) National picture: top 5 polluted cities are {', '.join([item['city'] for item in india_summary[:5]])}; "
         f"(2) Delhi-NCR hotspots at {selected_datetime or str(selected_ts)}: {', '.join([h['station'] for h in top_hotspots[:3]])} with AQI {', '.join([str(int(h['aqi'])) for h in top_hotspots[:3]])}; "
-        f"(3) Traffic correlation: {traffic_correlation['highest_traffic_period']} shows highest congestion, {traffic_correlation['highest_aqi_period']} shows highest pollution; "
-        f"(4) {len(enriched_factories)} registered factories across {len(factory_by_zone)} Delhi zones contribute to source emissions; "
-        f"(5) Intervention priorities: focus on {top_hotspots[0]['city']} for maximum impact. "
+        f"(3) Dominant pollutant at the worst hotspot is {pollutant_attr[0]['dominant_pollutant']} pointing to {pollutant_attr[0]['primary_source']} (confidence {pollutant_attr[0]['confidence']}); "
+        f"(4) Weather: wind {weather['wind_speed']} km/h giving {weather['dispersion']} dispersion; "
+        f"(5) Traffic correlation: {traffic_correlation['highest_traffic_period']} shows highest congestion, {traffic_correlation['highest_aqi_period']} shows highest pollution; "
+        f"(6) {len(enriched_factories)} registered factories across {len(factory_by_zone)} Delhi zones contribute to source emissions; "
+        f"(7) Intervention priorities: focus on {top_hotspots[0]['city']} for maximum impact. "
         f"Be concise, cite data, and suggest 2-3 immediate actions."
     )
     ai_summary = _call_ollama(ai_prompt, max_length=1200)
     if not ai_summary:
+        lead = pollutant_attr[0] if pollutant_attr else {'dominant_pollutant': 'PM2.5', 'primary_source': 'combustion'}
         ai_summary = (
             f"India faces acute air quality stress: {india_summary[0]['city']} leads with AQI {round(india_summary[0]['avg_aqi'])}. "
-            f"Delhi-NCR hotspots ({', '.join([h['station'] for h in top_hotspots[:3]])}) show critical pollution. "
-            f"Traffic peaks during {traffic_correlation['highest_traffic_period']} align with pollution spikes. "
+            f"Across Delhi-NCR the current average AQI is {int(round(latest['aqi'].mean()))} ({overall_health['category']}), peaking at {int(round(latest['aqi'].max()))}. "
+            f"The worst hotspot ({top_hotspots[0]['station']}) is driven by {lead['dominant_pollutant']}, implicating {lead['primary_source']}. "
+            f"Weather is {weather['dispersion'].lower()} for dispersion (wind {weather['wind_speed']} km/h), so pollutants are "
+            f"{'accumulating near the surface' if weather['dispersion'] == 'Poor' else 'partially ventilating'}. "
+            f"Traffic peaks during {traffic_correlation['highest_traffic_period']} align with pollution spikes, while "
             f"{len(enriched_factories)} industrial sources across {len(factory_by_zone)} zones amplify exposure. "
-            f"Immediate actions: Deploy enforcement in {top_hotspots[0]['station']}, impose traffic restrictions during {traffic_correlation['highest_aqi_period'].lower()} hours."
+            f"Immediate actions: deploy enforcement at {top_hotspots[0]['station']}, restrict heavy traffic during "
+            f"{traffic_correlation['highest_aqi_period'].lower()} hours, and issue a {overall_health['category']} health advisory to vulnerable groups."
         )
 
     return {
         'ai_summary': ai_summary,
         'alert_headline': alert_headline,
+        'alert_ticker': alert_ticker,
         'city_count': delhi_df['city'].nunique(),
         'station_count': delhi_df['station'].nunique(),
         'selected_datetime': selected_datetime or str(selected_ts),
@@ -219,13 +337,26 @@ def build_summary(path: Path = DELHI_AQI_PATH, selected_datetime: str | None = N
         'national_trends': national_trends,
         'delhi_hotspots': top_hotspots,
         'forecast_cards': forecast_cards,
+        'aqi_forecast': aqi_forecast,
+        'forecast_meta': forecast_meta,
+        'forecast_station': focus_station,
+        'forecast_station_options': sorted(selected_df['station'].unique().tolist()),
+        'diurnal_curve': diurnal_curve,
         'source_attribution': source_attribution_enhanced,
+        'pollutant_attribution': pollutant_attr,
+        'pollutant_mix': mix,
+        'weather': weather,
+        'city_comparison': cities,
+        'health_advisories': health_advisories,
+        'overall_health': overall_health,
         'factory_by_zone': factory_by_zone,
         'factory_count': len(enriched_factories),
         'factory_preview': enriched_factories[:10],
         'traffic_correlation': traffic_correlation,
         'recommendations': recommendations,
         'station_locations': station_locations,
+        'avg_aqi': int(round(latest['aqi'].mean())),
+        'max_aqi': int(round(latest['aqi'].max())),
         'generated_at': pd.Timestamp.utcnow().strftime('%Y-%m-%d %H:%M:%S IST'),
     }
 

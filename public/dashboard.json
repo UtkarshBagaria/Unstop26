@@ -1,6 +1,31 @@
 {
-  "ai_summary": "India faces acute air quality stress: Ahmedabad leads with AQI 452. Delhi-NCR hotspots (Anand Vihar, Delhi, ITO, Delhi, Shadipur, Delhi) show critical pollution. Traffic peaks during Afternoon align with pollution spikes. 80 industrial sources across 2 zones amplify exposure. Immediate actions: Deploy enforcement in Anand Vihar, Delhi, impose traffic restrictions during night hours.",
+  "ai_summary": "India faces acute air quality stress: Ahmedabad leads with AQI 452. Across Delhi-NCR the current average AQI is 489 (Severe), peaking at 500. The worst hotspot (Anand Vihar, Delhi) is driven by PM10, implicating Dust / Construction & Roads. Weather is moderate for dispersion (wind 5.4 km/h), so pollutants are partially ventilating. Traffic peaks during Afternoon align with pollution spikes, while 80 industrial sources across 2 zones amplify exposure. Immediate actions: deploy enforcement at Anand Vihar, Delhi, restrict heavy traffic during night hours, and issue a Severe health advisory to vulnerable groups.",
   "alert_headline": "ALERT: AQI thresholds exceeded in multiple Delhi hotspots; enforcement escalation advised.",
+  "alert_ticker": [
+    "\u26a0 SEVERE: Punjabi Bagh, Delhi at AQI 500 \u2014 halt outdoor activity & trigger GRAP.",
+    "\u26a0 SEVERE: RK Puram, Delhi at AQI 492 \u2014 halt outdoor activity & trigger GRAP.",
+    "\u26a0 SEVERE: Shadipur, Delhi at AQI 500 \u2014 halt outdoor activity & trigger GRAP.",
+    "\u26a0 SEVERE: Wazirpur, Delhi at AQI 500 \u2014 halt outdoor activity & trigger GRAP.",
+    "\u26a0 SEVERE: Okhla Phase 2, Delhi at AQI 500 \u2014 halt outdoor activity & trigger GRAP.",
+    "\u26a0 SEVERE: Noida Sec 125 at AQI 489 \u2014 halt outdoor activity & trigger GRAP.",
+    "\u26a0 SEVERE: NSIT Dwarka, Delhi at AQI 500 \u2014 halt outdoor activity & trigger GRAP.",
+    "\u26a0 SEVERE: Faridabad Sec 16A at AQI 479 \u2014 halt outdoor activity & trigger GRAP.",
+    "\u26a0 SEVERE: Mandir Marg, Delhi at AQI 500 \u2014 halt outdoor activity & trigger GRAP.",
+    "\u26a0 SEVERE: Ghaziabad Loni at AQI 500 \u2014 halt outdoor activity & trigger GRAP.",
+    "\u26a0 SEVERE: Rohini, Delhi at AQI 405 \u2014 halt outdoor activity & trigger GRAP.",
+    "\u26a0 SEVERE: Jahangirpuri, Delhi at AQI 500 \u2014 halt outdoor activity & trigger GRAP.",
+    "\u26a0 SEVERE: Ghaziabad Vasundhara at AQI 500 \u2014 halt outdoor activity & trigger GRAP.",
+    "\u26a0 SEVERE: ITO, Delhi at AQI 500 \u2014 halt outdoor activity & trigger GRAP.",
+    "\u26a0 SEVERE: Gurugram Sec 51 at AQI 500 \u2014 halt outdoor activity & trigger GRAP.",
+    "\u26a0 SEVERE: Dwarka Sec 8, Delhi at AQI 500 \u2014 halt outdoor activity & trigger GRAP.",
+    "\u26a0 SEVERE: Gurugram Vikas Sadan at AQI 500 \u2014 halt outdoor activity & trigger GRAP.",
+    "\u26a0 SEVERE: Bawana, Delhi at AQI 500 \u2014 halt outdoor activity & trigger GRAP.",
+    "\u26a0 SEVERE: Greater Noida at AQI 500 \u2014 halt outdoor activity & trigger GRAP.",
+    "\u26a0 SEVERE: Anand Vihar, Delhi at AQI 500 \u2014 halt outdoor activity & trigger GRAP.",
+    "\u26a0 SEVERE: Faridabad New Town at AQI 500 \u2014 halt outdoor activity & trigger GRAP.",
+    "\u26a0 SEVERE: Noida Sec 62 at AQI 500 \u2014 halt outdoor activity & trigger GRAP.",
+    "\u25b2 VERY POOR: Siri Fort, Delhi at AQI 390 \u2014 deploy inspectors, restrict heavy traffic."
+  ],
   "city_count": 5,
   "station_count": 23,
   "selected_datetime": "2025-12-31 23:00:00",
@@ -155,51 +180,43 @@
       "aqi": 500.0
     },
     {
-      "station": "ITO, Delhi",
+      "station": "Bawana, Delhi",
       "city": "Delhi",
       "aqi": 500.0
     },
     {
-      "station": "Shadipur, Delhi",
+      "station": "Dwarka Sec 8, Delhi",
       "city": "Delhi",
       "aqi": 500.0
     },
     {
-      "station": "Punjabi Bagh, Delhi",
-      "city": "Delhi",
+      "station": "Faridabad New Town",
+      "city": "Faridabad",
       "aqi": 500.0
     },
     {
-      "station": "Okhla Phase 2, Delhi",
-      "city": "Delhi",
+      "station": "Ghaziabad Loni",
+      "city": "Ghaziabad",
       "aqi": 500.0
     },
     {
-      "station": "Noida Sec 62",
+      "station": "Ghaziabad Vasundhara",
+      "city": "Ghaziabad",
+      "aqi": 500.0
+    },
+    {
+      "station": "Greater Noida",
       "city": "Noida",
       "aqi": 500.0
     },
     {
-      "station": "NSIT Dwarka, Delhi",
-      "city": "Delhi",
-      "aqi": 500.0
-    },
-    {
-      "station": "Mandir Marg, Delhi",
+      "station": "Wazirpur, Delhi",
       "city": "Delhi",
       "aqi": 500.0
     }
   ],
   "forecast_cards": [
     {
-      "station": "Noida Sec 62",
-      "city": "Noida",
-      "aqi": 500,
-      "aqi_bucket": "Severe",
-      "peak_hour": 18,
-      "risk_note": "High congestion and low dispersion are expected to sustain the hotspot."
-    },
-    {
       "station": "Punjabi Bagh, Delhi",
       "city": "Delhi",
       "aqi": 500,
@@ -208,15 +225,7 @@
       "risk_note": "High congestion and low dispersion are expected to sustain the hotspot."
     },
     {
-      "station": "Greater Noida",
-      "city": "Noida",
-      "aqi": 500,
-      "aqi_bucket": "Severe",
-      "peak_hour": 18,
-      "risk_note": "High congestion and low dispersion are expected to sustain the hotspot."
-    },
-    {
-      "station": "Bawana, Delhi",
+      "station": "Wazirpur, Delhi",
       "city": "Delhi",
       "aqi": 500,
       "aqi_bucket": "Severe",
@@ -224,13 +233,172 @@
       "risk_note": "High congestion and low dispersion are expected to sustain the hotspot."
     },
     {
-      "station": "Gurugram Vikas Sadan",
-      "city": "Gurugram",
+      "station": "Shadipur, Delhi",
+      "city": "Delhi",
+      "aqi": 500,
+      "aqi_bucket": "Severe",
+      "peak_hour": 18,
+      "risk_note": "High congestion and low dispersion are expected to sustain the hotspot."
+    },
+    {
+      "station": "Okhla Phase 2, Delhi",
+      "city": "Delhi",
+      "aqi": 500,
+      "aqi_bucket": "Severe",
+      "peak_hour": 18,
+      "risk_note": "High congestion and low dispersion are expected to sustain the hotspot."
+    },
+    {
+      "station": "Ghaziabad Loni",
+      "city": "Ghaziabad",
       "aqi": 500,
       "aqi_bucket": "Severe",
       "peak_hour": 18,
       "risk_note": "High congestion and low dispersion are expected to sustain the hotspot."
     }
+  ],
+  "aqi_forecast": [
+    {
+      "offset_h": 0,
+      "datetime": "2025-12-31 23:00",
+      "aqi": 500,
+      "bucket": "Severe",
+      "is_now": true
+    },
+    {
+      "offset_h": 6,
+      "datetime": "2026-01-01 05:00",
+      "aqi": 310,
+      "bucket": "Very Poor"
+    },
+    {
+      "offset_h": 12,
+      "datetime": "2026-01-01 11:00",
+      "aqi": 307,
+      "bucket": "Very Poor"
+    },
+    {
+      "offset_h": 18,
+      "datetime": "2026-01-01 17:00",
+      "aqi": 312,
+      "bucket": "Very Poor"
+    },
+    {
+      "offset_h": 24,
+      "datetime": "2026-01-01 23:00",
+      "aqi": 499,
+      "bucket": "Severe"
+    },
+    {
+      "offset_h": 30,
+      "datetime": "2026-01-02 05:00",
+      "aqi": 311,
+      "bucket": "Very Poor"
+    },
+    {
+      "offset_h": 36,
+      "datetime": "2026-01-02 11:00",
+      "aqi": 307,
+      "bucket": "Very Poor"
+    },
+    {
+      "offset_h": 42,
+      "datetime": "2026-01-02 17:00",
+      "aqi": 311,
+      "bucket": "Very Poor"
+    },
+    {
+      "offset_h": 48,
+      "datetime": "2026-01-02 23:00",
+      "aqi": 499,
+      "bucket": "Severe"
+    },
+    {
+      "offset_h": 54,
+      "datetime": "2026-01-03 05:00",
+      "aqi": 286,
+      "bucket": "Poor"
+    },
+    {
+      "offset_h": 60,
+      "datetime": "2026-01-03 11:00",
+      "aqi": 287,
+      "bucket": "Poor"
+    },
+    {
+      "offset_h": 66,
+      "datetime": "2026-01-03 17:00",
+      "aqi": 279,
+      "bucket": "Poor"
+    },
+    {
+      "offset_h": 72,
+      "datetime": "2026-01-03 23:00",
+      "aqi": 494,
+      "bucket": "Severe"
+    }
+  ],
+  "forecast_meta": {
+    "model_rmse": 29.0,
+    "persistence_rmse": 42.2,
+    "improvement_pct": 31.2,
+    "overall_rmse": 29.1,
+    "horizon_h": 24,
+    "method": "Gradient-boosted trees (lagged AQI + weather + calendar)",
+    "n_train": 120000,
+    "n_test": 30000
+  },
+  "forecast_station": "Anand Vihar, Delhi",
+  "forecast_station_options": [
+    "Anand Vihar, Delhi",
+    "Bawana, Delhi",
+    "Dwarka Sec 8, Delhi",
+    "Faridabad New Town",
+    "Faridabad Sec 16A",
+    "Ghaziabad Loni",
+    "Ghaziabad Vasundhara",
+    "Greater Noida",
+    "Gurugram Sec 51",
+    "Gurugram Vikas Sadan",
+    "ITO, Delhi",
+    "Jahangirpuri, Delhi",
+    "Mandir Marg, Delhi",
+    "NSIT Dwarka, Delhi",
+    "Noida Sec 125",
+    "Noida Sec 62",
+    "Okhla Phase 2, Delhi",
+    "Punjabi Bagh, Delhi",
+    "RK Puram, Delhi",
+    "Rohini, Delhi",
+    "Shadipur, Delhi",
+    "Siri Fort, Delhi",
+    "Wazirpur, Delhi"
+  ],
+  "diurnal_curve": [
+    295.1668567518248,
+    295.1668567518248,
+    295.1668567518248,
+    295.1668567518248,
+    295.1668567518248,
+    295.1668567518248,
+    297.30018248175185,
+    295.1668567518248,
+    295.1668567518248,
+    295.1668567518248,
+    295.1668567518248,
+    295.1668567518248,
+    275.6044708029197,
+    295.1668567518248,
+    295.1668567518248,
+    295.1668567518248,
+    295.1668567518248,
+    295.1668567518248,
+    312.3759124087591,
+    295.1668567518248,
+    295.1668567518248,
+    295.1668567518248,
+    295.1668567518248,
+    295.3868613138686
   ],
   "source_attribution": [
     {
@@ -243,42 +411,223 @@
       "priority": "Immediate"
     },
     {
-      "station": "ITO, Delhi",
+      "station": "Bawana, Delhi",
       "city": "Delhi",
       "aqi": 500,
       "traffic_signal": "High",
       "factory_signal": "High",
       "geospatial_note": "Building-footprint density and nearby industrial clusters correlate with elevated local exposure.",
       "priority": "Immediate"
+    },
+    {
+      "station": "Dwarka Sec 8, Delhi",
+      "city": "Delhi",
+      "aqi": 500,
+      "traffic_signal": "High",
+      "factory_signal": "High",
+      "geospatial_note": "Building-footprint density and nearby industrial clusters correlate with elevated local exposure.",
+      "priority": "Immediate"
+    },
+    {
+      "station": "Faridabad New Town",
+      "city": "Faridabad",
+      "aqi": 500,
+      "traffic_signal": "High",
+      "factory_signal": "High",
+      "geospatial_note": "Building-footprint density and nearby industrial clusters correlate with elevated local exposure.",
+      "priority": "Immediate"
+    },
+    {
+      "station": "Ghaziabad Loni",
+      "city": "Ghaziabad",
+      "aqi": 500,
+      "traffic_signal": "High",
+      "factory_signal": "High",
+      "geospatial_note": "Building-footprint density and nearby industrial clusters correlate with elevated local exposure.",
+      "priority": "Immediate",
+      "dominant_pollutant": "PM10",
+      "primary_source": "Dust / Construction & Roads",
+      "confidence": 0.57
+    }
+  ],
+  "pollutant_attribution": [
+    {
+      "station": "Punjabi Bagh, Delhi",
+      "city": "Delhi",
+      "aqi": 500,
+      "dominant_pollutant": "PM10",
+      "primary_source": "Dust / Construction & Roads",
+      "explanation": "Coarse dust from construction sites, unpaved roads and demolition.",
+      "confidence": 0.62
+    },
+    {
+      "station": "Wazirpur, Delhi",
+      "city": "Delhi",
+      "aqi": 500,
+      "dominant_pollutant": "PM10",
+      "primary_source": "Dust / Construction & Roads",
+      "explanation": "Coarse dust from construction sites, unpaved roads and demolition.",
+      "confidence": 0.6
     },
     {
       "station": "Shadipur, Delhi",
       "city": "Delhi",
       "aqi": 500,
-      "traffic_signal": "High",
-      "factory_signal": "High",
-      "geospatial_note": "Building-footprint density and nearby industrial clusters correlate with elevated local exposure.",
-      "priority": "Immediate"
-    },
-    {
-      "station": "Punjabi Bagh, Delhi",
-      "city": "Delhi",
-      "aqi": 500,
-      "traffic_signal": "High",
-      "factory_signal": "High",
-      "geospatial_note": "Building-footprint density and nearby industrial clusters correlate with elevated local exposure.",
-      "priority": "Immediate"
+      "dominant_pollutant": "PM10",
+      "primary_source": "Dust / Construction & Roads",
+      "explanation": "Coarse dust from construction sites, unpaved roads and demolition.",
+      "confidence": 0.58
     },
     {
       "station": "Okhla Phase 2, Delhi",
       "city": "Delhi",
       "aqi": 500,
-      "traffic_signal": "High",
-      "factory_signal": "High",
-      "geospatial_note": "Building-footprint density and nearby industrial clusters correlate with elevated local exposure.",
-      "priority": "Immediate"
+      "dominant_pollutant": "PM10",
+      "primary_source": "Dust / Construction & Roads",
+      "explanation": "Coarse dust from construction sites, unpaved roads and demolition.",
+      "confidence": 0.61
+    },
+    {
+      "station": "Ghaziabad Loni",
+      "city": "Ghaziabad",
+      "aqi": 500,
+      "dominant_pollutant": "PM10",
+      "primary_source": "Dust / Construction & Roads",
+      "explanation": "Coarse dust from construction sites, unpaved roads and demolition.",
+      "confidence": 0.57
+    },
+    {
+      "station": "Mandir Marg, Delhi",
+      "city": "Delhi",
+      "aqi": 500,
+      "dominant_pollutant": "PM10",
+      "primary_source": "Dust / Construction & Roads",
+      "explanation": "Coarse dust from construction sites, unpaved roads and demolition.",
+      "confidence": 0.58
     }
   ],
+  "pollutant_mix": {
+    "labels": [
+      "PM2.5",
+      "PM10",
+      "NO2",
+      "SO2",
+      "CO",
+      "O3"
+    ],
+    "values": [
+      33.9,
+      38.5,
+      8.9,
+      2.2,
+      15.2,
+      1.3
+    ]
+  },
+  "weather": {
+    "wind_speed": 5.4,
+    "humidity": 55.4,
+    "temperature": 15.9,
+    "visibility": 1.3,
+    "dispersion": "Moderate",
+    "note": "Moderate winds provide partial ventilation of the urban boundary layer."
+  },
+  "city_comparison": [
+    {
+      "city": "Ghaziabad",
+      "avg_aqi": 500,
+      "category": "Severe",
+      "dominant_pollutant": "PM10",
+      "trend": "rising",
+      "station_count": 2
+    },
+    {
+      "city": "Gurugram",
+      "avg_aqi": 500,
+      "category": "Severe",
+      "dominant_pollutant": "PM10",
+      "trend": "flat",
+      "station_count": 2
+    },
+    {
+      "city": "Noida",
+      "avg_aqi": 496,
+      "category": "Severe",
+      "dominant_pollutant": "PM10",
+      "trend": "rising",
+      "station_count": 3
+    },
+    {
+      "city": "Faridabad",
+      "avg_aqi": 490,
+      "category": "Severe",
+      "dominant_pollutant": "PM2.5",
+      "trend": "flat",
+      "station_count": 2
+    },
+    {
+      "city": "Delhi",
+      "avg_aqi": 485,
+      "category": "Severe",
+      "dominant_pollutant": "PM10",
+      "trend": "rising",
+      "station_count": 14
+    }
+  ],
+  "health_advisories": [
+    {
+      "aqi": 500,
+      "category": "Severe",
+      "color": "#8e44ad",
+      "message": "Serious health impact; affects healthy people and severely harms the ill.",
+      "protective_action": "Halt outdoor work, close schools, activate emergency GRAP measures.",
+      "station": "Anand Vihar, Delhi",
+      "city": "Delhi"
+    },
+    {
+      "aqi": 500,
+      "category": "Severe",
+      "color": "#8e44ad",
+      "message": "Serious health impact; affects healthy people and severely harms the ill.",
+      "protective_action": "Halt outdoor work, close schools, activate emergency GRAP measures.",
+      "station": "Bawana, Delhi",
+      "city": "Delhi"
+    },
+    {
+      "aqi": 500,
+      "category": "Severe",
+      "color": "#8e44ad",
+      "message": "Serious health impact; affects healthy people and severely harms the ill.",
+      "protective_action": "Halt outdoor work, close schools, activate emergency GRAP measures.",
+      "station": "Dwarka Sec 8, Delhi",
+      "city": "Delhi"
+    },
+    {
+      "aqi": 500,
+      "category": "Severe",
+      "color": "#8e44ad",
+      "message": "Serious health impact; affects healthy people and severely harms the ill.",
+      "protective_action": "Halt outdoor work, close schools, activate emergency GRAP measures.",
+      "station": "Faridabad New Town",
+      "city": "Faridabad"
+    },
+    {
+      "aqi": 500,
+      "category": "Severe",
+      "color": "#8e44ad",
+      "message": "Serious health impact; affects healthy people and severely harms the ill.",
+      "protective_action": "Halt outdoor work, close schools, activate emergency GRAP measures.",
+      "station": "Ghaziabad Loni",
+      "city": "Ghaziabad"
+    }
+  ],
+  "overall_health": {
+    "aqi": 489,
+    "category": "Severe",
+    "color": "#8e44ad",
+    "message": "Serious health impact; affects healthy people and severely harms the ill.",
+    "protective_action": "Halt outdoor work, close schools, activate emergency GRAP measures."
+  },
   "factory_by_zone": {
     "Central": [
       {
@@ -725,29 +1074,29 @@
       "reason": "Persistent high AQI suggests concentrated emissions and significant public exposure."
     },
     {
-      "station": "ITO, Delhi",
+      "station": "Bawana, Delhi",
       "city": "Delhi",
       "priority": "Immediate",
       "action": "Deploy inspectors for dust-control, idling enforcement, and hotspot-specific compliance checks.",
       "reason": "Persistent high AQI suggests concentrated emissions and significant public exposure."
     },
     {
-      "station": "Shadipur, Delhi",
+      "station": "Dwarka Sec 8, Delhi",
       "city": "Delhi",
       "priority": "Immediate",
       "action": "Deploy inspectors for dust-control, idling enforcement, and hotspot-specific compliance checks.",
       "reason": "Persistent high AQI suggests concentrated emissions and significant public exposure."
     },
     {
-      "station": "Punjabi Bagh, Delhi",
-      "city": "Delhi",
+      "station": "Faridabad New Town",
+      "city": "Faridabad",
       "priority": "Immediate",
       "action": "Deploy inspectors for dust-control, idling enforcement, and hotspot-specific compliance checks.",
       "reason": "Persistent high AQI suggests concentrated emissions and significant public exposure."
     },
     {
-      "station": "Okhla Phase 2, Delhi",
-      "city": "Delhi",
+      "station": "Ghaziabad Loni",
+      "city": "Ghaziabad",
       "priority": "Immediate",
       "action": "Deploy inspectors for dust-control, idling enforcement, and hotspot-specific compliance checks.",
       "reason": "Persistent high AQI suggests concentrated emissions and significant public exposure."
@@ -916,5 +1265,7 @@
       "aqi": 500
     }
   ],
-  "generated_at": "2026-07-05 12:20:23 IST"
+  "avg_aqi": 489,
+  "max_aqi": 500,
+  "generated_at": "2026-07-19 10:55:26 IST"
 }

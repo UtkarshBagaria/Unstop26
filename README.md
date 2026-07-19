@@ -1,89 +1,88 @@
-# Urban Air Quality Intelligence Platform for Smart Cities
+# AirIntel — Urban Air Quality Intelligence Platform
 
-**An AI-powered platform for geospatial air quality monitoring, hyperlocal pollution forecasting, and evidence-based enforcement prioritization across Indian urban centers.**
+**An AI-powered platform for geospatial pollution source attribution, machine-learning AQI forecasting, and evidence-based enforcement intelligence across Indian urban centers — with a hyperlocal focus on Delhi-NCR.**
 
 ---
 
 ## Executive Summary
 
-This platform fuses multiple data layers (air quality monitoring, traffic, industrial registry, meteorology) to move urban air quality management from reactive dashboarding to **proactive, geospatially-attributed intervention intelligence**. 
+AirIntel fuses monitoring-station data, traffic mobility, an industrial registry, and meteorology to move urban air-quality management from **reactive dashboarding** to **proactive, geospatially-attributed intervention intelligence**.
 
 ### Problem Addressed
 - **1.67M premature deaths annually** from air pollution in India (Lancet Planetary Health)
-- **Only 31% of cities** with monitoring data have actionable multi-agency response protocols (CAG audit, 2024)
-- **No integration layer** linking pollution signals → source attribution → enforcement action
+- **Only 31% of monitored cities** have actionable multi-agency response protocols (CAG audit, 2024)
+- The data exists; the **intelligence layer to act on it does not**
 
-### Solution
-A hyperlocal intelligence system that:
-✅ **Identifies pollution hotspots** by source (traffic, factories, construction) at ward/zone level  
-✅ **Forecasts AQI 24-72 hours ahead** at 1km grid resolution  
-✅ **Prioritizes enforcement actions** with evidence-backed recommendations  
-✅ **Tracks intervention effectiveness** across cities for peer learning  
-
----
-
-## Key Features
-
-### 1. **Multi-Layer Data Fusion**
-- National air quality monitoring (50 cities, CAAQMS data)
-- Delhi-NCR hyperlocal station data (hourly readings)
-- Traffic mobility patterns (speed, congestion by time-of-day)
-- Industrial registry (8,739+ registered factories with zone/category mapping)
-
-### 2. **Pollution Source Attribution**
-- **Traffic signal analysis**: Correlates congestion with AQI spikes
-- **Factory zone mapping**: Enriches 8,739 industrial sources with Delhi zones (North/South/East/West/Central) and categories (Industrial, Printing, Manufacturing, Cold Storage, Energy, Waste)
-- **Geospatial density**: Building footprints correlated with pollution levels
-
-### 3. **Hyperlocal Time-Series Intelligence**
-- **Traffic-pollution correlation by period**: Morning/Afternoon/Evening/Night analysis
-- **Peak-hour predictions**: Identifies highest-risk windows for public exposure
-- **Seasonal/weekly patterns**: Embedded in Ollama-based narrative
-
-### 4. **AI-Powered Narrative Generation**
-- **Ollama local LLM** (llama3.2) generates detailed, actionable summaries
-- Fallback to expert-crafted narratives if model unavailable
-- 300+ character insights covering national trends, Delhi hotspots, intervention priorities
-
-### 5. **Interactive Geospatial Dashboard**
-- **Executive AI Summary** at top (full-width, auto-generated)
-- **Clickable drill-down sections**:
-  - India-wide city rankings (AQI category breakdown)
-  - Delhi hotspots map with station markers
-  - Traffic-pollution correlation charts
-  - Factory zone distribution with category filtering
-- **Date/time simulator** for historical and prospective analysis
-- **Enforcement priority index** with source attribution confidence scores
+### What the platform delivers
+- ✅ **Source attribution** — identifies the dominant pollutant per hotspot and maps it to a likely emission source with a confidence score
+- ✅ **ML forecasting** — 24–72h hyperlocal AQI forecasts that **beat a persistence baseline by ~31% RMSE** on a time-based holdout
+- ✅ **Enforcement prioritisation** — ranked, evidence-backed recommendations
+- ✅ **Public-health advisories** — CPCB-category guidance for vulnerable groups
+- ✅ **Multi-city comparison** — the five NCR cities with 24h trend direction
+- ✅ **Live alerting** — a running ticker that fires when stations cross Very-Poor / Severe thresholds
 
 ---
 
-## Quick Start (5 minutes)
+## Key Capabilities
+
+### 1. Machine-Learning AQI Forecasting (`src/air_intelligence.py`)
+- **Model:** gradient-boosted trees (`HistGradientBoostingRegressor`, scikit-learn)
+- **Features (13):** last-known AQI (lag), wind speed, humidity, temperature, visibility, PM2.5, PM10, a station month×hour climatology term, forecast horizon, and target-time calendar features (hour, month, day-of-week, is-weekend)
+- **Direct multi-horizon design** — horizon is a feature, so one model forecasts the whole 6h→72h range
+- **Honest evaluation** — a **time-based train/test split** (earliest 80% train, latest 20% test); the headline skill is measured at the 24h horizon and reported alongside the raw model vs. persistence RMSE
+- **Trained once and cached**; automatically **falls back** to a seasonal-climatology model if scikit-learn is unavailable
+
+### 2. Pollutant-Based Source Attribution
+Normalises PM2.5 / PM10 / NO2 / SO2 / CO / O3 into comparable sub-indices, identifies the **dominant driver** per hotspot, and maps it to a real-world source (traffic, dust/construction, industry, biomass) with a **confidence score** derived from how far the lead pollutant separates from the rest.
+
+### 3. Multi-Layer Data Fusion
+- **National** daily AQI across 50 cities (`city_day.csv`)
+- **Delhi-NCR** 6-hourly readings — **5 cities, 23 stations, 2020–2025**, full pollutant + weather breakdown (`delhi_ncr_aqi_dataset.csv`)
+- **Traffic** congestion & speed by time-of-day (`delhi_traffic_features.csv`)
+- **Industrial registry** — factories extracted from PDF and enriched with Delhi zone + category
+
+### 4. Health, Weather & Comparative Intelligence
+- **Health advisories** — colour-coded CPCB category, message, and protective action per hotspot
+- **Weather dispersion** — wind/humidity/visibility → dispersion rating explaining pollutant accumulation
+- **Multi-city NCR comparison** — current AQI, dominant pollutant, and rising/falling 24h trend
+
+### 5. Interactive Geospatial Dashboard (`index.html`)
+- **Dark glassmorphism UI** with sticky header and a **running alert ticker**
+- **KPI cards** that recolour by severity (avg/peak AQI, forecast skill, dispersion, stations, factories)
+- **Live Leaflet map** — AQI-coloured, size-scaled station markers; **click a marker to forecast that station**
+- **Chart.js visualisations** — colour-segmented 72h forecast (with a "Now" anchor point), national trend, pollutant-mix doughnut, and city-comparison bars, all with rich hover tooltips
+- **Forecast station selector** + **click-to-focus** from hotspots, source-attribution rows, and map markers
+- **Date/time simulator** to replay any moment from 2020–2025
+
+---
+
+## Quick Start
 
 ### Prerequisites
 - Python 3.10+
-- ~500MB disk space
-- Internet connection (for optional Ollama model)
+- ~1 GB free disk / RAM (model training is in-memory)
+- Internet connection for the map tiles & chart CDN (graceful fallback if offline)
+- *(Optional)* Ollama running `llama3.2` for a generative AI narrative
 
-### Installation & Run
-
+### Install & Run
 ```bash
-# 1. Clone/navigate to project
-cd d:\Hackathon26\Unstop26
+# 1. Navigate to the project
+cd Unstop26
 
-# 2. Install Python dependencies
-pip install pandas pypdf numpy
+# 2. Install dependencies
+pip install pandas pypdf numpy scikit-learn
 
-# 3. (Optional) Start Ollama for AI summaries
+# 3. (Optional) start Ollama for the generative narrative
 ollama run llama3.2
 
-# 4. Start the dashboard server
+# 4. Start the server (trains & caches the forecast model on first run, ~15s)
 python api/dashboard.py
 
-# 5. Open in browser
-# Navigate to: http://127.0.0.1:8000
+# 5. Open the dashboard
+#    http://127.0.0.1:8000
 ```
 
-**That's it!** The dashboard will load all datasets and generate analysis on demand.
+The dashboard opens on a varied demo date (**2023-09-28**) so the map shows a spread of AQI colours. Pick a winter date (e.g. **2023-11-08**) to see the pollution crisis and live alerts — those dates are genuinely Severe across the NCR in the data.
 
 ---
 
@@ -92,212 +91,125 @@ python api/dashboard.py
 ```
 Unstop26/
 ├── api/
-│   └── dashboard.py                 # HTTP server serving dashboard & API
+│   └── dashboard.py                 # HTTP server: serves dashboard + JSON API
 ├── src/
-│   ├── dashboard_generator.py       # Core analysis engine (hotspots, forecasts, AI)
+│   ├── dashboard_generator.py       # Orchestration, caching, AI narrative
+│   ├── air_intelligence.py          # ML forecaster, attribution, health, weather, comparison
 │   ├── factory_locations.py         # Factory zone/category enrichment
-│   └── traffic_pollution.py         # Time-based traffic correlation
+│   └── traffic_pollution.py         # Time-based traffic ↔ pollution correlation
 ├── data/
-│   ├── delhi_ncr_aqi_dataset.csv    # Delhi-NCR hourly AQI
+│   ├── delhi_ncr_aqi_dataset.csv    # Delhi-NCR 6-hourly AQI + weather (2020–2025)
 │   ├── city_day.csv                 # National daily AQI
 │   ├── delhi_traffic_features.csv   # Traffic density & speed by period
+│   ├── delhi_building_footprints.geojson
 │   └── 07-list_of_registered_working_factories.pdf
 ├── public/
-│   └── dashboard.json               # Auto-generated analysis snapshot
+│   └── dashboard.json               # Cached analysis snapshot
 ├── tests/
 │   └── test_dashboard_generator.py  # Regression tests
 ├── index.html                       # Interactive dashboard UI
-├── DEPLOYMENT.md                    # Detailed deployment guide
-└── README.md                        # This file
+├── DEPLOYMENT.md
+└── README.md
 ```
 
 ---
 
 ## How It Works
 
-### Data Pipeline
-
 ```
-Data Sources → Load & Enrich → Compute Metrics → AI Narrative → JSON API → Browser Dashboard
+Data Sources → Load & Cache → Analytics Layers → ML Forecast → JSON API → Interactive Dashboard
 ```
 
-**1. Data Loading** (`dashboard_generator.py`)
-- Delhi-NCR: hourly AQI, station locations, timestamps
-- National: daily AQI by city, latest date tracking
-- Traffic: congestion scores, speeds by time-of-day
-- Factories: PDF extraction → zone & category mapping
-
-**2. Analysis**
-- **Hotspot Detection**: Group by station, compute avg AQI, rank top 8
-- **Forecast Cards**: Peak hour prediction based on historical patterns
-- **Source Attribution**: Traffic signal (high if AQI ≥ 300), factory signal (count + category), geospatial notes
-- **Traffic Correlation**: Segment by 4 time periods, compute correlation insights
-- **Recommendations**: Priority ranking (Immediate if AQI ≥ 300, else High)
-
-**3. AI Narrative** (Ollama)
-- Prompt includes: national top cities, Delhi hotspots, traffic peaks, factory distribution
-- Model generates 300+ character actionable summary
-- Fallback to expert summary if model unavailable
-
-**4. API Response** (JSON)
-- 15+ fields: `ai_summary`, `delhi_hotspots`, `factory_by_zone`, `traffic_correlation`, `source_attribution`, etc.
-- Consumed by interactive dashboard
-- Cacheable at `public/dashboard.json`
-
----
-
-## Using the Dashboard
-
-### Main Sections
-
-| Section | Purpose |
-|---------|---------|
-| **Executive AI Summary** | Top-of-page auto-generated insight (300+ chars) |
-| **India-Wide Snapshot** | Table of top 10 polluted cities nationwide |
-| **Delhi Hotspots** | 8 highest-AQI monitoring stations with rankings |
-| **Traffic-Pollution Correlation** | 4 time periods (Morning/Afternoon/Evening/Night) with congestion & AQI |
-| **Factory Source Attribution** | Zone-wise industrial registry with category breakdown |
-| **Forecast Cards** | Top 5 at-risk stations with peak hours & interventions |
-| **Enforcement Priority Index** | Ranked hotspots with traffic/factory signals & confidence |
-| **Station Map** | Geospatial visualization of all monitoring stations |
-
-### Interactive Features
-
-- **Click section headers** to expand/collapse drill-down details
-- **Select date/time** to simulate historical or prospective scenarios
-- **View hotspots map** with color-coded AQI severity
-- **Export data** via API: `http://127.0.0.1:8000/api/dashboard?selected_datetime=2020-01-02T12:00`
-
-
----
-
-
-### Manual Testing
-```bash
-# Check JSON output
-curl http://127.0.0.1:8000/api/dashboard | python -m json.tool
-
-# Simulate different time
-curl "http://127.0.0.1:8000/api/dashboard?selected_datetime=2020-01-15T18:00"
-```
-
----
-
-## Architecture Diagram
-
-```
-┌──────────────────────────────────────────────────────────┐
-│                    Browser Dashboard                     │
-│  (index.html) Interactive UI with map & drill-downs     │
-└────────────────────────┬─────────────────────────────────┘
-                         │ HTTP GET /api/dashboard
-┌────────────────────────▼─────────────────────────────────┐
-│                   REST API Server                        │
-│  (api/dashboard.py) Serves JSON & static HTML           │
-└────────────────────────┬─────────────────────────────────┘
-                         │ build_summary()
-┌────────────────────────▼─────────────────────────────────┐
-│             Analysis Engine (Python/Pandas)             │
-│                                                          │
-│  ┌─────────────────────────────────────────────────┐    │
-│  │ Data Loading                                    │    │
-│  │ • Delhi AQI (hourly) → Hotspots & trends      │    │
-│  │ • National AQI (daily) → Top cities           │    │
-│  │ • Traffic patterns → Congestion signals       │    │
-│  │ • Factories (PDF) → Zones & categories        │    │
-│  └─────────────────────────────────────────────────┘    │
-│  ┌─────────────────────────────────────────────────┐    │
-│  │ Compute Metrics                                 │    │
-│  │ • Source attribution (traffic + factory)       │    │
-│  │ • Time-period correlation (4 windows)          │    │
-│  │ • Peak hour prediction                          │    │
-│  │ • Enforcement prioritization                   │    │
-│  └─────────────────────────────────────────────────┘    │
-│  ┌─────────────────────────────────────────────────┐    │
-│  │ AI Narrative (Ollama llama3.2)                 │    │
-│  │ • Contextual summary (300+ chars)              │    │
-│  │ • Fallback to expert summary                   │    │
-│  └─────────────────────────────────────────────────┘    │
-└──────────────────────────────────────────────────────────┘
-```
+1. **Load & cache** — datasets, the factory PDF, and the traffic correlation are parsed once and memoised; the forecast model is trained once at startup.
+2. **Analytics** — hotspot ranking, pollutant attribution, health advisories, weather dispersion, multi-city comparison, traffic correlation, and enforcement priorities.
+3. **ML forecast** — the trained model projects the selected (or worst) station 72h ahead, anchored to its current reading.
+4. **AI narrative** — Ollama (if running) writes a data-cited summary; otherwise a rich expert fallback is generated from the computed metrics.
+5. **API + UI** — the browser renders the map, charts, KPIs, and interactive panels from a single JSON payload.
 
 ---
 
 ## API Reference
 
-### GET `/api/dashboard`
+### `GET /api/dashboard`
 
-**Query Parameters:**
-```
-selected_datetime = "2020-01-02T12:00"  # Optional ISO format
-```
+**Query parameters**
 
-**Response (JSON):**
+| Parameter | Example | Description |
+|-----------|---------|-------------|
+| `selected_datetime` | `2023-09-28T09:00` | ISO moment to analyse (2020–2025). Optional; defaults to the latest reading. |
+| `station` | `Wazirpur, Delhi` | Station to forecast. Optional; defaults to the worst hotspot. |
+
+**Selected response fields**
 ```json
 {
-  "ai_summary": "India remains under significant air quality pressure...",
-  "alert_headline": "ALERT: AQI thresholds exceeded...",
-  "delhi_hotspots": [
-    {
-      "station": "Anand Vihar, Delhi",
-      "city": "Delhi",
-      "aqi": 500,
-      "aqi_bucket": "Severe"
-    }
-    // ... 7 more
+  "ai_summary": "…",
+  "alert_ticker": ["▲ VERY POOR: … deploy inspectors …"],
+  "avg_aqi": 92,
+  "max_aqi": 147,
+  "delhi_hotspots": [ { "station": "…", "city": "…", "aqi": 133 } ],
+  "pollutant_attribution": [
+    { "station": "…", "dominant_pollutant": "PM10",
+      "primary_source": "Dust / Construction & Roads", "confidence": 0.72 }
   ],
-  "factory_by_zone": {
-    "Central": [
-      {"name": "XYZ Manufacturing", "category": "Industrial"},
-      // ...
-    ]
+  "pollutant_mix": { "labels": ["PM2.5","PM10","NO2","SO2","CO","O3"], "values": [34.1, …] },
+  "aqi_forecast": [ { "offset_h": 0, "aqi": 133, "bucket": "Moderate", "is_now": true } ],
+  "forecast_meta": {
+    "method": "Gradient-boosted trees (lagged AQI + weather + calendar)",
+    "model_rmse": 29.0, "persistence_rmse": 42.2, "improvement_pct": 31.2, "horizon_h": 24
   },
-  "traffic_correlation": {
-    "by_period": [
-      {
-        "period": "Morning",
-        "avg_aqi": 280,
-        "traffic_congestion_score": 65,
-        "avg_speed_kmph": 25.4
-      }
-    ],
-    "highest_aqi_period": "Evening",
-    "highest_traffic_period": "Morning"
-  },
-  "source_attribution": [...],
-  "station_locations": [...],
-  "generated_at": "2020-01-02 12:00:00 IST"
+  "forecast_station": "Bawana, Delhi",
+  "forecast_station_options": ["Anand Vihar, Delhi", "…"],
+  "city_comparison": [ { "city": "Ghaziabad", "avg_aqi": 127, "trend": "rising" } ],
+  "weather": { "wind_speed": 3.3, "dispersion": "Poor", "note": "…" },
+  "overall_health": { "category": "Moderate", "color": "#f1c40f", "protective_action": "…" },
+  "factory_by_zone": { "Central": [ { "name": "…", "category": "Industrial" } ] },
+  "station_locations": [ { "station": "…", "latitude": 28.6, "longitude": 77.3, "aqi": 133 } ],
+  "generated_at": "2026-07-19 09:00:00 IST"
 }
+```
+
+**Examples**
+```bash
+curl "http://127.0.0.1:8000/api/dashboard?selected_datetime=2023-11-08T09:00"
+curl "http://127.0.0.1:8000/api/dashboard?selected_datetime=2023-09-28T09:00&station=Wazirpur,%20Delhi"
 ```
 
 ---
 
-## Deployment
+## Architecture
 
-See **[DEPLOYMENT.md](DEPLOYMENT.md)** for:
-- Production setup instructions
-- Troubleshooting common issues
-- Performance tuning
-- Customization guide
-
-**TL;DR:**
-```bash
-pip install pandas pypdf numpy
-python api/dashboard.py
-# Open http://127.0.0.1:8000
+```
+┌──────────────────────────────────────────────────────────┐
+│                   Browser Dashboard (index.html)         │
+│  Leaflet map · Chart.js · KPI cards · alert ticker       │
+│  Interactivity: station selector, click-to-focus         │
+└────────────────────────┬─────────────────────────────────┘
+                         │ GET /api/dashboard?selected_datetime&station
+┌────────────────────────▼─────────────────────────────────┐
+│                REST API (api/dashboard.py)               │
+└────────────────────────┬─────────────────────────────────┘
+                         │ build_summary()  (cached datasets + model)
+┌────────────────────────▼─────────────────────────────────┐
+│          Orchestration (src/dashboard_generator.py)      │
+│  hotspots · enforcement · AI narrative · caching         │
+└───────┬───────────────────────────────────┬──────────────┘
+        │                                   │
+┌───────▼───────────────┐        ┌──────────▼───────────────┐
+│ air_intelligence.py   │        │ factory_locations.py     │
+│ • ML forecaster       │        │ traffic_pollution.py     │
+│ • source attribution  │        │ • zone/category mapping  │
+│ • health / weather    │        │ • time-period correlation│
+│ • city comparison     │        │                          │
+└───────────────────────┘        └──────────────────────────┘
 ```
 
 ---
 
 ## Testing
-
 ```bash
-# Run regression tests
 python -m pytest tests/ -v
-
-# Expected output:
-# test_dashboard_generator.py::test_build_summary_returns_expected_keys PASSED
-# test_dashboard_generator.py::test_build_summary_accepts_selected_datetime PASSED
+# test_build_summary_returns_expected_keys ....... PASSED
+# test_build_summary_accepts_selected_datetime ... PASSED
 ```
 
 ---
@@ -306,12 +218,13 @@ python -m pytest tests/ -v
 
 | Component | Technology |
 |-----------|-----------|
-| **Backend** | Python 3.10, pandas, pypdf, numpy |
-| **API** | BaseHTTPRequestHandler (standard library) |
+| **Backend** | Python 3.10, pandas, numpy, pypdf |
+| **ML** | scikit-learn (`HistGradientBoostingRegressor`) |
+| **API** | `http.server` (standard library) |
 | **Frontend** | HTML5, CSS3, JavaScript (ES6) |
-| **Mapping** | Leaflet.js (optional, for geospatial viz) |
-| **AI** | Ollama (llama3.2 local LLM) |
-| **Data Format** | JSON, CSV, PDF |
+| **Mapping** | Leaflet.js (CARTO dark tiles) |
+| **Charts** | Chart.js 4 |
+| **AI narrative** | Ollama (llama3.2) — optional, with expert fallback |
 
 ---
 
@@ -319,73 +232,35 @@ python -m pytest tests/ -v
 
 | Metric | Value |
 |--------|-------|
-| First data load | 2-3 seconds |
-| Ollama inference | 4-8 seconds per prompt |
-| Full analysis generation | 5-10 seconds |
-| Dashboard render time | <1 second |
-| JSON payload size | ~15 KB |
+| Forecast model training (once, at startup) | ~15 s |
+| Cached request (analysis + forecast) | ~2 s |
+| 24h forecast skill vs persistence | **~31% lower RMSE** (time-split holdout) |
+| Dashboard render | <1 s |
 
 ---
 
-## Limitations & Future Work
+## Modelling Notes & Limitations
+- **Forecast:** direct multi-horizon gradient boosting; the reported skill uses an out-of-time split, but the climatology feature is computed over the full history, so the number is optimistic relative to a strict rolling backtest.
+- **Cadence:** the Delhi-NCR dataset is 6-hourly, so forecasts are produced at 6-hour steps to 72h.
+- **Source attribution** is pollutant-fingerprint based, not a trained inverse-dispersion model.
+- **Thermal/pollution anomalies** and factory geolocation use illustrative values for the prototype.
+- Data is historical (2020–2025), not a live CAAQMS feed.
 
-### Current Scope
-- Demo data (historical 2020-01 snapshot, not real-time)
-- Single-city focus (Delhi-NCR) with optional national comparison
-- Manual factory category mapping (rule-based, not ML-trained)
-
-### Enhancements
-- [ ] Real-time CAAQMS data feed integration
-- [ ] Multi-city instance deployment with federation
-- [ ] Satellite imagery integration (Sentinel, MODIS)
-- [ ] Atmospheric dispersion modeling (CALPUFF, WRF)
-- [ ] Predictive ML models for 24-72h AQI forecast
-- [ ] Mobile app with location-aware health advisories
-- [ ] Enforcement audit trail & compliance tracking
-- [ ] Public API for third-party integrations
-
----
-
-## Key Insights (From Data)
-
-**National Trends (2020-01 sample):**
-- Ahmedabad averaged AQI 452 (Severe)
-- Delhi averaged AQI 259 (Very Poor)
-- Top 8 polluted cities span Tier 1 & Tier 2 urban centers
-
-**Delhi-NCR Hotspots:**
-- Anand Vihar shows peak pollution (AQI 500+)
-- Evening traffic peak (17:00-21:00) correlates with highest AQI
-- Industrial zones (Central, East) contribute significant factory-linked emissions
-
-**Traffic-Pollution Correlation:**
-- Night period (21:00-05:00) shows highest AQI despite lower traffic
-- Morning rush (06:00-12:00) shows moderate correlation
-- Afternoon stable conditions suggest meteorological factors dominate
-
----
-
-## Contributing
-
-For questions, bug reports, or enhancements:
-1. Check [DEPLOYMENT.md](DEPLOYMENT.md) troubleshooting section
-2. Review code comments in [src/dashboard_generator.py](src/dashboard_generator.py)
-3. Run tests to validate changes: `pytest tests/`
+### Future Work
+- [ ] Real-time CAAQMS ingestion
+- [ ] Rolling-origin backtest + meteorological forecast inputs
+- [ ] Satellite integration (Sentinel-5P, MODIS thermal anomalies)
+- [ ] Building-footprint geospatial overlays on the map
+- [ ] Multi-language citizen advisories (Kannada, Tamil, …)
 
 ---
 
 ## License
-
-This project was developed for the Unstop Hackathon 2026 (Theme: Smart Cities & Environmental Intelligence).
+Developed for the Unstop Hackathon 2026 (Theme: Smart Cities & Environmental Intelligence).
 
 ---
 
 ## Judges' Quick Links
-
-🚀 **Run Dashboard**: `python api/dashboard.py` → http://127.0.0.1:8000  
-📋 **Deployment Guide**: See [DEPLOYMENT.md](DEPLOYMENT.md)  
-🧪 **Run Tests**: `pytest tests/ -v`
-
----
-
-**Platform developed as proof-of-concept for India's urban air quality crisis. Ready for deployment in 50+ cities under National Clean Air Programme.**
+🚀 **Run:** `python api/dashboard.py` → http://127.0.0.1:8000
+🧪 **Tests:** `pytest tests/ -v`
+📋 **Deployment:** see [DEPLOYMENT.md](DEPLOYMENT.md)

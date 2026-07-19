@@ -1,170 +1,174 @@
-# Urban Air Quality Intelligence Platform - Deployment Guide
+# AirIntel — Deployment Guide
 
-## Quick Start
-
-### Prerequisites
+## Prerequisites
 - Python 3.10+
-- pip package manager
-- Windows/Linux/macOS
+- pip
+- Windows / Linux / macOS
+- Internet access for map tiles (Leaflet/CARTO) and Chart.js CDN — the UI degrades gracefully offline
+- *(Optional)* Ollama running `llama3.2` for the generative AI narrative
 
-### Installation
+## Installation
 
-1. **Navigate to project directory**
+1. **Navigate to the project directory**
    ```bash
-   cd d:\Hackathon26\Unstop26
+   cd Unstop26
    ```
 
 2. **Install dependencies**
    ```bash
-   pip install pandas pypdf numpy
+   pip install pandas pypdf numpy scikit-learn
    ```
+   > `scikit-learn` powers the ML forecaster. If it is not installed, the platform automatically falls back to a statistical seasonal-climatology model.
 
-3. **Prepare data files**
-   Ensure these files exist in the `data/` directory:
-   - `delhi_ncr_aqi_dataset.csv` - Delhi-NCR hourly AQI data
-   - `city_day.csv` - National daily AQI data
-   - `delhi_traffic_features.csv` - Delhi traffic data
-   - `07-list_of_registered_working_factories.pdf` - Factory registry
+3. **Verify the data files** exist in `data/`:
+   - `delhi_ncr_aqi_dataset.csv` — Delhi-NCR 6-hourly AQI + weather (2020–2025, 5 cities, 23 stations)
+   - `city_day.csv` — national daily AQI
+   - `delhi_traffic_features.csv` — traffic density & speed by period
+   - `07-list_of_registered_working_factories.pdf` — factory registry
+   - `delhi_building_footprints.geojson` — (large, optional; not loaded at runtime)
 
-4. **(Optional) Start Ollama local LLM**
+4. **(Optional) Start Ollama**
    ```bash
-   # Download and run Ollama with llama3.2 model
    ollama run llama3.2
    ```
-   Server should run on `http://127.0.0.1:11434/api/generate`
+   Expected endpoint: `http://127.0.0.1:11434/api/generate`. Without it, a rich expert fallback narrative is generated from the computed metrics.
 
-### Running the Platform
+## Running the Platform
 
-**Start the dashboard server:**
 ```bash
 python api/dashboard.py
 ```
 
-**Access the dashboard:**
-Open browser to: `http://127.0.0.1:8000`
+Open: **http://127.0.0.1:8000**
 
-The dashboard will:
-- Load all national and Delhi-NCR datasets
-- Parse factory locations from PDF
-- Generate AI insights via Ollama (or fallback summary)
-- Display interactive map, hotspots, and correlations
+On the **first run** the server:
+- Loads and caches the datasets and the factory registry (parsed from PDF)
+- **Trains and caches the gradient-boosted forecast model (~15 s)**
+- Writes a snapshot to `public/dashboard.json`
 
-### File Structure
+Subsequent requests are served from cache in ~2 s.
+
+> The dashboard opens on a varied demo date (**2023-09-28**) so the map shows a spread of AQI colours. Winter dates (e.g. **2023-11-08**) are genuinely Severe across the NCR in the data — use them to demo the crisis view and live alerts.
+
+## File Structure
 ```
 Unstop26/
 ├── api/
-│   └── dashboard.py          # HTTP server (port 8000)
+│   └── dashboard.py           # HTTP server (port 8000), parses selected_datetime + station
 ├── src/
-│   ├── dashboard_generator.py # Core analysis engine
-│   ├── factory_locations.py   # Zone/category mapping
-│   └── traffic_pollution.py   # Traffic correlation
-├── data/
-│   ├── delhi_ncr_aqi_dataset.csv
-│   ├── city_day.csv
-│   ├── delhi_traffic_features.csv
-│   └── 07-list_of_registered_working_factories.pdf
+│   ├── dashboard_generator.py # Orchestration, caching, AI narrative
+│   ├── air_intelligence.py    # ML forecaster, attribution, health, weather, comparison
+│   ├── factory_locations.py   # Zone/category enrichment
+│   └── traffic_pollution.py   # Traffic ↔ pollution correlation
+├── data/                      # Datasets (see above)
 ├── public/
-│   └── dashboard.json         # Generated analysis snapshot
+│   └── dashboard.json         # Cached analysis snapshot
 ├── tests/
 │   └── test_dashboard_generator.py
 ├── index.html                 # Interactive dashboard UI
-└── README.md
+├── README.md
+└── DEPLOYMENT.md
 ```
 
-### Running Tests
+## Running Tests
 ```bash
 python -m pytest tests/ -v
 ```
 
-### Using the Dashboard
+## Using the Dashboard
+1. **Select date/time** in the header and click **Run Analysis** to replay any moment (2020–2025).
+2. **Read the Executive AI Summary** for a data-cited narrative.
+3. **Explore the map** — click any station marker (or a hotspot / source-attribution row) to **forecast that station**; the map flies to it.
+4. **Switch forecast stations** via the dropdown in the forecast card.
+5. **Hover charts** for exact values; the forecast tooltip shows the timestamp and AQI category.
+6. **Export JSON** at `http://127.0.0.1:8000/api/dashboard?selected_datetime=...&station=...`
 
-1. **Select Date/Time**: Use the datetime picker to simulate historical analysis
-2. **AI Summary**: Read the top executive summary for key insights
-3. **Click Drill-Downs**: Expand sections to see detailed data (India cities, Delhi hotspots, traffic periods, factories)
-4. **View Map**: Click "View Hotspots Map" to see geospatial distribution
-5. **Export Data**: JSON is available at `http://127.0.0.1:8000/api/dashboard?selected_datetime=...`
+## API
+`GET /api/dashboard`
 
-### Customization
+| Parameter | Example | Description |
+|-----------|---------|-------------|
+| `selected_datetime` | `2023-09-28T09:00` | Moment to analyse (optional) |
+| `station` | `Wazirpur, Delhi` | Station to forecast (optional; defaults to worst hotspot) |
 
-**Modify Ollama prompt** in `src/dashboard_generator.py`, function `build_summary()`:
-- Edit `ai_prompt` variable (line ~200) to change analysis focus
+## Customization
 
-**Add more data sources** in `src/dashboard_generator.py`:
-- Add load functions and merge into `build_summary()`
+**Forecast model** — `src/air_intelligence.py`, `train_forecast_model()`:
+- Tune `max_samples`, or the `HistGradientBoostingRegressor` hyperparameters (`max_depth`, `learning_rate`, `max_iter`).
+- Adjust the feature set in `FORECAST_FEATURES`.
 
-**Change map bounds/zoom** in `index.html`:
-- Edit Leaflet map initialization around line 500
+**AI narrative** — `src/dashboard_generator.py`, `build_summary()`:
+- Edit the `ai_prompt` string, or the expert fallback below it.
 
-### Performance Notes
-- First run processes 8,739 factory entries from PDF (~2-3 seconds)
-- Ollama inference: ~4-8 seconds per prompt
-- Full dashboard generation: ~5-10 seconds
+**Alert thresholds** — `build_summary()` builds `alert_ticker` from Very-Poor (≥300) and Severe (≥400) stations; edit those cut-offs.
 
-### Troubleshooting
+**Map view** — `index.html`, `renderMap()`:
+- Change the initial `setView([28.61, 77.20], 10)` centre/zoom or the tile layer.
 
-**"No data" in tabs:**
-- Check that data files exist in `data/` directory
-- Verify CSV encoding is UTF-8
-- Run tests: `pytest tests/test_dashboard_generator.py`
+**Caching** — `src/dashboard_generator.py` uses a module-level `_CACHE`. Restart the server to invalidate (e.g. after swapping a dataset).
 
-**Ollama timeout:**
-- Install Ollama and pull `llama3.2` model
-- Or disable Ollama; platform uses fallback summary
+## Performance
+| Metric | Value |
+|--------|-------|
+| Forecast model training (once, at startup) | ~15 s |
+| Cached request (analysis + forecast) | ~2 s |
+| 24h forecast skill vs persistence | ~31% lower RMSE (time-split holdout) |
+| Dashboard render | <1 s |
 
-**Port already in use:**
-- Change port in `api/dashboard.py` line 48: `HTTPServer(('127.0.0.1', XXXX), Handler)`
+## Troubleshooting
 
-**PDF parsing errors:**
-- Try regenerating factory list: `python src/dashboard_generator.py`
-- Check PDF is readable and has text layer
+**Slow first request / startup**
+- Expected — the forecast model trains once (~15 s) then caches. Later requests are fast.
 
-### Architecture
+**Forecast shows "statistical fallback" instead of gradient boosting**
+- `scikit-learn` is not installed: `pip install scikit-learn`, then restart.
 
+**Map or charts blank**
+- Offline / CDN blocked. The map and charts load Leaflet & Chart.js from CDNs; connect to the internet or self-host those assets. Panels show a graceful fallback message.
+
+**"No data" in a panel**
+- Confirm the `data/` files exist and are UTF-8. Run `pytest tests/ -v`.
+
+**Ollama timeout / no AI narrative**
+- Optional feature. Install Ollama and pull `llama3.2`, or ignore — the expert fallback is used automatically.
+
+**Port already in use**
+- Edit the port in `api/dashboard.py`: `HTTPServer(('127.0.0.1', 8000), Handler)`.
+
+**PDF parsing issues**
+- The factory list is parsed from the registry PDF (capped for the prototype). Regenerate with `python src/dashboard_generator.py`; ensure the PDF has a text layer.
+
+## Architecture
 ```
-┌─────────────────────────────────────────┐
-│   Browser (index.html)                  │
-│  ┌──────────────┐ ┌──────────────┐     │
-│  │ AI Summary   │ │ Map View     │     │
-│  │ Hotspots     │ │ Drill-downs  │     │
-│  │ Drill-downs  │ │ Time Series  │     │
-│  └──────────────┘ └──────────────┘     │
-└─────────────────────────────────────────┘
-         ↓ HTTP GET /api/dashboard
-┌─────────────────────────────────────────┐
-│   API Server (api/dashboard.py)         │
-└─────────────────────────────────────────┘
-         ↓ build_summary()
-┌─────────────────────────────────────────┐
-│   Analysis Engine                       │
-│  ┌──────────────────────────────────┐   │
-│  │ Load Datasets (pandas)           │   │
-│  │ ├─ Delhi AQI hourly             │   │
-│  │ ├─ National AQI daily           │   │
-│  │ └─ Traffic data                 │   │
-│  └──────────────────────────────────┘   │
-│  ┌──────────────────────────────────┐   │
-│  │ Compute Metrics                  │   │
-│  │ ├─ Hotspots (by station)        │   │
-│  │ ├─ Factory zones (enriched)     │   │
-│  │ ├─ Traffic correlation          │   │
-│  │ └─ Source attribution           │   │
-│  └──────────────────────────────────┘   │
-│  ┌──────────────────────────────────┐   │
-│  │ AI Narrative (Ollama)            │   │
-│  │ └─ llama3.2 model               │   │
-│  └──────────────────────────────────┘   │
-└─────────────────────────────────────────┘
-         ↓ JSON Response
-┌─────────────────────────────────────────┐
-│  Data Output                            │
-│  ├─ ai_summary (detailed narrative)    │
-│  ├─ delhi_hotspots (8 top stations)    │
-│  ├─ factory_by_zone (zone→factories)   │
-│  ├─ traffic_correlation (by period)    │
-│  ├─ source_attribution (priority list) │
-│  └─ station_locations (lat/lng)        │
-└─────────────────────────────────────────┘
+┌──────────────────────────────────────────────┐
+│  Browser (index.html)                        │
+│  Leaflet map · Chart.js · KPI cards · ticker │
+│  station selector · click-to-focus           │
+└───────────────┬──────────────────────────────┘
+                │ GET /api/dashboard?selected_datetime&station
+┌───────────────▼──────────────────────────────┐
+│  API server (api/dashboard.py)               │
+└───────────────┬──────────────────────────────┘
+                │ build_summary()  (cached)
+┌───────────────▼──────────────────────────────┐
+│  Orchestration (dashboard_generator.py)      │
+│  hotspots · enforcement · AI narrative       │
+├───────────────┬───────────────┬──────────────┤
+│ air_intelligence.py           │ factory_locations.py │
+│ • ML forecaster (GBT)         │ traffic_pollution.py │
+│ • pollutant attribution       │ • zone/category      │
+│ • health / weather / cities   │ • period correlation │
+└───────────────────────────────┴──────────────────────┘
+                │ JSON
+┌───────────────▼──────────────────────────────┐
+│  Output: ai_summary, alert_ticker,           │
+│  aqi_forecast + forecast_meta,               │
+│  pollutant_attribution, pollutant_mix,       │
+│  city_comparison, weather, health,           │
+│  delhi_hotspots, factory_by_zone,            │
+│  station_locations, KPIs                     │
+└──────────────────────────────────────────────┘
 ```
 
-### Contact & Support
-For questions or issues, refer to project documentation in `README.md` and source code comments.
+## Support
+See `README.md` and inline source comments for details.
