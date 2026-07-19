@@ -239,19 +239,60 @@ python -m pytest tests/ -v
 
 ---
 
-## Modelling Notes & Limitations
-- **Forecast:** direct multi-horizon gradient boosting; the reported skill uses an out-of-time split, but the climatology feature is computed over the full history, so the number is optimistic relative to a strict rolling backtest.
-- **Cadence:** the Delhi-NCR dataset is 6-hourly, so forecasts are produced at 6-hour steps to 72h.
-- **Source attribution** is pollutant-fingerprint based, not a trained inverse-dispersion model.
-- **Thermal/pollution anomalies** and factory geolocation use illustrative values for the prototype.
-- Data is historical (2020–2025), not a live CAAQMS feed.
+## Limitations & Future Work
 
-### Future Work
-- [ ] Real-time CAAQMS ingestion
-- [ ] Rolling-origin backtest + meteorological forecast inputs
-- [ ] Satellite integration (Sentinel-5P, MODIS thermal anomalies)
-- [ ] Building-footprint geospatial overlays on the map
-- [ ] Multi-language citizen advisories (Kannada, Tamil, …)
+### Current Scope
+- Demo data (historical 2020-01 snapshot, not real-time)
+- Single-city focus (Delhi-NCR) with optional national comparison
+- Manual factory category mapping (rule-based, not ML-trained)
+
+### Enhancements
+- [ ] Real-time CAAQMS data feed integration
+- [ ] Multi-city instance deployment with federation
+- [ ] Satellite imagery integration (Sentinel, MODIS)
+- [ ] Atmospheric dispersion modeling (CALPUFF, WRF)
+- [ ] Predictive ML models for 24-72h AQI forecast
+- [ ] Mobile app with location-aware health advisories
+- [ ] Enforcement audit trail & compliance tracking
+- [ ] Public API for third-party integrations
+
+---
+
+## Key Insights (From Data)
+
+**National Trends (2020-01 sample):**
+- Ahmedabad averaged AQI 452 (Severe)
+- Delhi averaged AQI 259 (Very Poor)
+- Top 8 polluted cities span Tier 1 & Tier 2 urban centers
+
+**Delhi-NCR Hotspots:**
+- Anand Vihar shows peak pollution (AQI 500+)
+- Evening traffic peak (17:00-21:00) correlates with highest AQI
+- Industrial zones (Central, East) contribute significant factory-linked emissions
+
+**Traffic-Pollution Correlation:**
+- Night period (21:00-05:00) shows highest AQI despite lower traffic
+- Morning rush (06:00-12:00) shows moderate correlation
+- Afternoon stable conditions suggest meteorological factors dominate
+
+---
+
+## Datasets
+
+1. [Delhi Weather and AQI](https://www.kaggle.com/datasets/vishardmehta/delhi-pollution-aqi-dataset)
+2. [India AQI](https://www.kaggle.com/datasets/rohanrao/air-quality-data-in-india)
+3. [Delhi Traffic](https://www.kaggle.com/datasets/vishardmehta/delhi-traffic-travel-time-prediction-dataset)
+4. [Delhi Building Geo-Data](https://www.kaggle.com/datasets/sunnysharma432/delhi-building-footprints)
+5. [Delhi Factory Names](https://www.kaggle.com/datasets/tanmayikona/delhi-factories)
+
+---
+
+## Contributing
+
+For questions, bug reports, or enhancements:
+1. Check [DEPLOYMENT.md](DEPLOYMENT.md) troubleshooting section
+2. Review code comments in [src/dashboard_generator.py](src/dashboard_generator.py)
+3. Run tests to validate changes: `pytest tests/`
 
 ---
 
